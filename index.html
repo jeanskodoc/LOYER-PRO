@@ -1,0 +1,2086 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="LoyerPro - La solution tout-en-un de gestion locative : quittances, locataires, baux, paiements, états des lieux et fiscalité.">
+    <meta name="theme-color" content="#4f46e5">
+    <title>LoyerPro — Gestion locative complète pour propriétaires</title>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* ============ DESIGN SYSTEM ============ */
+        :root {
+            /* Palette moderne */
+            --primary-50: #eef2ff;
+            --primary-100: #e0e7ff;
+            --primary-500: #6366f1;
+            --primary-600: #4f46e5;
+            --primary-700: #4338ca;
+
+            --teal-50: #f0fdfa;
+            --teal-500: #14b8a6;
+            --teal-600: #0d9488;
+
+            --amber-50: #fffbeb;
+            --amber-400: #fbbf24;
+            --amber-500: #f59e0b;
+            --amber-600: #d97706;
+
+            --rose-500: #f43f5e;
+            --emerald-500: #10b981;
+
+            /* Texte */
+            --text-1: #0f172a;
+            --text-2: #475569;
+            --text-3: #94a3b8;
+            --text-on-primary: #ffffff;
+
+            /* Surfaces */
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --surface-2: #f1f5f9;
+            --surface-3: #e2e8f0;
+            --border: #e2e8f0;
+            --border-strong: #cbd5e1;
+
+            /* Espacements */
+            --space-xs: 0.5rem;
+            --space-sm: 1rem;
+            --space-md: 1.5rem;
+            --space-lg: 3rem;
+            --space-xl: 5rem;
+
+            /* Rayons */
+            --r-sm: 8px;
+            --r-md: 12px;
+            --r-lg: 18px;
+            --r-xl: 28px;
+            --r-full: 999px;
+
+            /* Ombres */
+            --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.05);
+            --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.06);
+            --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.08);
+            --shadow-lg: 0 20px 48px rgba(15, 23, 42, 0.12);
+            --shadow-glow: 0 8px 32px rgba(99, 102, 241, 0.25);
+
+            /* Layout */
+            --container-max: 1240px;
+            --container-px: clamp(1rem, 5vw, 2rem);
+            --header-h: 72px;
+
+            /* Transitions */
+            --t: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --t-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+            --gradient-mesh: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.25) 0px, transparent 50%),
+                             radial-gradient(at 100% 0%, rgba(20, 184, 166, 0.2) 0px, transparent 50%),
+                             radial-gradient(at 50% 100%, rgba(236, 72, 153, 0.15) 0px, transparent 50%);
+            --gradient-card: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(139,92,246,0.04));
+        }
+
+        /* ============ MODE SOMBRE ============ */
+        [data-theme="dark"] {
+            --text-1: #f1f5f9;
+            --text-2: #cbd5e1;
+            --text-3: #64748b;
+            --bg: #0a0e1a;
+            --surface: #131826;
+            --surface-2: #1a2030;
+            --surface-3: #242b3d;
+            --border: #242b3d;
+            --border-strong: #334155;
+            --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+            --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.5);
+            --shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.6);
+        }
+
+        /* ============ RESET ============ */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: var(--header-h);
+            -webkit-text-size-adjust: 100%;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text-1);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: background-color var(--t), color var(--t);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        img { max-width: 100%; height: auto; display: block; }
+        a { color: inherit; text-decoration: none; }
+        ul { list-style: none; }
+        button { font-family: inherit; }
+
+        /* ============ ACCESSIBILITÉ ============ */
+        .skip-link {
+            position: absolute;
+            top: -100px;
+            left: 0;
+            background: var(--primary-600);
+            color: #fff;
+            padding: 12px 24px;
+            z-index: 1000;
+            border-radius: 0 0 var(--r-sm) 0;
+            transition: top var(--t);
+        }
+        .skip-link:focus { top: 0; }
+
+        :focus-visible {
+            outline: 3px solid var(--primary-500);
+            outline-offset: 3px;
+            border-radius: 4px;
+        }
+
+        /* ============ LAYOUT ============ */
+        .container {
+            width: 100%;
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 0 var(--container-px);
+        }
+
+        section { padding: clamp(3.5rem, 8vw, 6rem) 0; }
+
+        .section-header {
+            text-align: center;
+            max-width: 720px;
+            margin: 0 auto clamp(2rem, 5vw, 3.5rem);
+        }
+
+        .section-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--primary-50);
+            color: var(--primary-600);
+            padding: 6px 16px;
+            border-radius: var(--r-full);
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        [data-theme="dark"] .section-eyebrow {
+            background: rgba(99, 102, 241, 0.15);
+            color: var(--primary-500);
+        }
+
+        .section-title {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            color: var(--text-1);
+            text-wrap: balance;
+        }
+
+        .section-subtitle {
+            margin-top: 1rem;
+            color: var(--text-2);
+            font-size: clamp(1rem, 1.5vw, 1.15rem);
+            text-wrap: pretty;
+        }
+
+        /* ============ NAVIGATION ============ */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: var(--header-h);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            z-index: 100;
+            transition: all var(--t);
+            border-bottom: 1px solid transparent;
+        }
+        [data-theme="dark"] .navbar { background: rgba(19, 24, 38, 0.85); }
+        .navbar.scrolled {
+            border-bottom-color: var(--border);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .navbar .container {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.35rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .brand-mark {
+            width: 38px;
+            height: 38px;
+            border-radius: var(--r-sm);
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.1rem;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .brand-text { color: var(--text-1); }
+        .brand-accent {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: clamp(1rem, 2vw, 2rem);
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-2);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color var(--t);
+            position: relative;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -6px; left: 0;
+            width: 0; height: 2px;
+            background: var(--primary-500);
+            transition: width var(--t);
+            border-radius: 2px;
+        }
+        .nav-links a:hover { color: var(--text-1); }
+        .nav-links a:hover::after { width: 100%; }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .icon-btn {
+            background: var(--surface-2);
+            border: none;
+            color: var(--text-1);
+            width: 40px; height: 40px;
+            border-radius: var(--r-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            transition: all var(--t);
+        }
+        .icon-btn:hover {
+            background: var(--primary-50);
+            color: var(--primary-600);
+            transform: translateY(-1px);
+        }
+        [data-theme="dark"] .icon-btn:hover {
+            background: rgba(99, 102, 241, 0.15);
+        }
+
+        .nav-cta {
+            background: var(--primary-600);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: var(--r-full);
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all var(--t);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .nav-cta:hover {
+            background: var(--primary-700);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .nav-toggle {
+            display: none;
+            background: var(--surface-2);
+            border: none;
+            color: var(--text-1);
+            font-size: 1.25rem;
+            cursor: pointer;
+            width: 44px; height: 44px;
+            border-radius: var(--r-sm);
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ============ BOUTONS ============ */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.85rem 1.5rem;
+            border-radius: var(--r-full);
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all var(--t);
+            min-height: 48px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            line-height: 1.2;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: var(--primary-600);
+            color: #fff;
+            box-shadow: var(--shadow-sm);
+        }
+        .btn-primary:hover {
+            background: var(--primary-700);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .btn-accent {
+            background: var(--amber-500);
+            color: #fff;
+        }
+        .btn-accent:hover {
+            background: var(--amber-600);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(245, 158, 11, 0.35);
+        }
+
+        .btn-white {
+            background: #fff;
+            color: var(--primary-600);
+            box-shadow: var(--shadow-sm);
+        }
+        .btn-white:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-ghost {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+        }
+        .btn-ghost:hover {
+            background: #fff;
+            color: var(--primary-600);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-1);
+            border-color: var(--border-strong);
+        }
+        .btn-outline:hover {
+            border-color: var(--primary-500);
+            color: var(--primary-600);
+            background: var(--primary-50);
+        }
+        [data-theme="dark"] .btn-outline:hover {
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        /* ============ HERO ============ */
+        .hero {
+            position: relative;
+            padding-top: calc(var(--header-h) + 60px);
+            padding-bottom: 80px;
+            background: var(--bg);
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--gradient-mesh);
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        [data-theme="dark"] .hero::before { opacity: 0.4; }
+
+        .hero-grid {
+            position: relative;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: clamp(2rem, 5vw, 4rem);
+            align-items: center;
+        }
+
+        .hero-content { position: relative; z-index: 2; }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-2);
+            padding: 6px 14px 6px 6px;
+            border-radius: var(--r-full);
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-xs);
+        }
+
+        .hero-badge-tag {
+            background: var(--gradient-primary);
+            color: #fff;
+            padding: 3px 10px;
+            border-radius: var(--r-full);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5.5vw, 3.75rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 1.25rem;
+            color: var(--text-1);
+            text-wrap: balance;
+        }
+
+        .hero h1 .gradient-text {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-tagline {
+            font-size: clamp(1rem, 1.8vw, 1.2rem);
+            color: var(--text-2);
+            margin-bottom: 2rem;
+            max-width: 540px;
+            text-wrap: pretty;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-bottom: 2.5rem;
+        }
+
+        .hero-meta {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            color: var(--text-3);
+            font-size: 0.875rem;
+        }
+        .hero-meta-item { display: inline-flex; align-items: center; gap: 6px; }
+        .hero-meta i { color: var(--emerald-500); }
+
+        /* ============ DASHBOARD PREVIEW ============ */
+        .hero-preview {
+            position: relative;
+            z-index: 2;
+        }
+
+        .dashboard-mockup {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r-xl);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .mockup-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 18px;
+            background: var(--surface-2);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .mockup-dot {
+            width: 12px; height: 12px;
+            border-radius: 50%;
+        }
+        .mockup-dot.red { background: #ff5f57; }
+        .mockup-dot.amber { background: #ffbd2e; }
+        .mockup-dot.green { background: #28c840; }
+
+        .mockup-title {
+            margin-left: 12px;
+            color: var(--text-3);
+            font-size: 0.8rem;
+        }
+
+        .mockup-body { padding: 1.5rem; }
+
+        .mockup-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .mockup-stat {
+            background: var(--surface-2);
+            border-radius: var(--r-md);
+            padding: 12px;
+        }
+        .mockup-stat-label {
+            font-size: 0.7rem;
+            color: var(--text-3);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 4px;
+        }
+        .mockup-stat-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-1);
+        }
+        .mockup-stat-trend {
+            font-size: 0.7rem;
+            color: var(--emerald-500);
+            margin-top: 2px;
+        }
+
+        .mockup-chart {
+            background: var(--surface-2);
+            border-radius: var(--r-md);
+            padding: 16px;
+            margin-bottom: 1rem;
+        }
+        .mockup-chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .mockup-chart-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-1);
+        }
+        .mockup-chart-legend {
+            font-size: 0.7rem;
+            color: var(--text-3);
+        }
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 6px;
+            height: 100px;
+        }
+        .bar {
+            flex: 1;
+            background: var(--primary-500);
+            border-radius: 4px 4px 0 0;
+            opacity: 0.8;
+            transition: opacity var(--t);
+        }
+        .bar:hover { opacity: 1; }
+        .bar:nth-child(1) { height: 45%; }
+        .bar:nth-child(2) { height: 65%; }
+        .bar:nth-child(3) { height: 55%; }
+        .bar:nth-child(4) { height: 80%; background: var(--teal-500); }
+        .bar:nth-child(5) { height: 70%; }
+        .bar:nth-child(6) { height: 90%; background: var(--amber-500); }
+        .bar:nth-child(7) { height: 75%; }
+
+        .mockup-list {
+            background: var(--surface-2);
+            border-radius: var(--r-md);
+            padding: 12px;
+        }
+        .mockup-list-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.8rem;
+        }
+        .mockup-list-item:last-child { border-bottom: none; }
+        .mockup-avatar {
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .mockup-name {
+            color: var(--text-1);
+            font-weight: 500;
+            flex: 1;
+        }
+        .mockup-status {
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: var(--r-full);
+            font-weight: 600;
+        }
+        .mockup-status.paid {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--emerald-500);
+        }
+        .mockup-status.pending {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--amber-600);
+        }
+
+        /* Floating decoration */
+        .floating-card {
+            position: absolute;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r-md);
+            padding: 12px 16px;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            animation: float 3s ease-in-out infinite;
+        }
+        .floating-card.top-right {
+            top: 12%;
+            right: -5%;
+            animation-delay: 0.5s;
+        }
+        .floating-card.bottom-left {
+            bottom: 10%;
+            left: -5%;
+        }
+        .floating-icon {
+            width: 32px; height: 32px;
+            border-radius: var(--r-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 0.85rem;
+        }
+        .floating-icon.green { background: var(--emerald-500); }
+        .floating-icon.amber { background: var(--amber-500); }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* ============ STATS BAR ============ */
+        .stats-bar {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: clamp(2rem, 5vw, 3rem) 0;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+        }
+        .stat-label {
+            margin-top: 8px;
+            color: var(--text-2);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        /* ============ FEATURES GRID ============ */
+        .features { background: var(--bg); }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+            gap: clamp(1.25rem, 2.5vw, 1.5rem);
+        }
+
+        .feature-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: clamp(1.5rem, 3vw, 2rem);
+            transition: all var(--t);
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+        }
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 3px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform var(--t);
+        }
+        .feature-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-md);
+            border-color: transparent;
+        }
+        .feature-card:hover::before { transform: scaleX(1); }
+
+        .feature-icon {
+            width: 56px; height: 56px;
+            border-radius: var(--r-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            color: #fff;
+            margin-bottom: 1.25rem;
+            box-shadow: var(--shadow-sm);
+        }
+        .feature-icon.indigo { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
+        .feature-icon.teal { background: linear-gradient(135deg, #14b8a6, #06b6d4); }
+        .feature-icon.amber { background: linear-gradient(135deg, #f59e0b, #f97316); }
+        .feature-icon.rose { background: linear-gradient(135deg, #f43f5e, #ec4899); }
+        .feature-icon.emerald { background: linear-gradient(135deg, #10b981, #14b8a6); }
+        .feature-icon.violet { background: linear-gradient(135deg, #8b5cf6, #a855f7); }
+
+        .feature-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-1);
+        }
+
+        .feature-desc {
+            color: var(--text-2);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .feature-tag {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 4px 10px;
+            background: var(--primary-50);
+            color: var(--primary-600);
+            border-radius: var(--r-full);
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        [data-theme="dark"] .feature-tag {
+            background: rgba(99, 102, 241, 0.15);
+        }
+
+        /* ============ MODULES COMPLETS ============ */
+        .modules { background: var(--surface); }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+            gap: 1rem;
+        }
+
+        .module-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 1rem;
+            border-radius: var(--r-md);
+            background: var(--surface-2);
+            transition: all var(--t);
+            border: 1px solid transparent;
+        }
+        .module-item:hover {
+            background: var(--surface);
+            border-color: var(--border);
+            transform: translateX(4px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .module-check {
+            width: 24px; height: 24px;
+            min-width: 24px;
+            border-radius: 50%;
+            background: var(--emerald-500);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            margin-top: 2px;
+        }
+
+        .module-text {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-1);
+        }
+        .module-text small {
+            display: block;
+            color: var(--text-3);
+            font-weight: 400;
+            font-size: 0.8rem;
+            margin-top: 2px;
+        }
+
+        /* ============ WORKFLOW / HOW IT WORKS ============ */
+        .workflow { background: var(--bg); }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+            gap: 2rem;
+            position: relative;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 60px; height: 60px;
+            margin: 0 auto 1.25rem;
+            background: var(--gradient-primary);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            box-shadow: var(--shadow-glow);
+            position: relative;
+        }
+        .step-number::after {
+            content: '';
+            position: absolute;
+            inset: -6px;
+            border: 2px dashed var(--primary-200, #c7d2fe);
+            border-radius: 50%;
+            opacity: 0.4;
+        }
+
+        .step-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-1);
+            margin-bottom: 0.5rem;
+        }
+
+        .step-desc {
+            color: var(--text-2);
+            font-size: 0.95rem;
+        }
+
+        /* ============ PRICING ============ */
+        .pricing { background: var(--surface); }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+            gap: 1.5rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .price-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r-xl);
+            padding: 2rem;
+            position: relative;
+            transition: all var(--t);
+            display: flex;
+            flex-direction: column;
+        }
+        .price-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+        .price-card.featured {
+            background: var(--gradient-primary);
+            color: #fff;
+            border: none;
+            transform: scale(1.03);
+            box-shadow: var(--shadow-glow);
+        }
+        .price-card.featured:hover { transform: scale(1.03) translateY(-4px); }
+
+        .price-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--amber-500);
+            color: #fff;
+            padding: 4px 14px;
+            border-radius: var(--r-full);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .price-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .price-desc {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .price-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+        }
+        .price-period {
+            font-size: 0.85rem;
+            opacity: 0.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .price-features {
+            flex-grow: 1;
+            margin-bottom: 1.5rem;
+        }
+        .price-features li {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 6px 0;
+            font-size: 0.9rem;
+        }
+        .price-features i {
+            color: var(--emerald-500);
+            margin-top: 4px;
+        }
+        .price-card.featured .price-features i { color: #fff; opacity: 0.9; }
+
+        .price-cta {
+            width: 100%;
+        }
+        .price-card.featured .price-cta {
+            background: #fff;
+            color: var(--primary-600);
+        }
+        .price-card.featured .price-cta:hover {
+            background: var(--amber-500);
+            color: #fff;
+        }
+
+        /* ============ TESTIMONIALS ============ */
+        .testimonials { background: var(--bg); }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+            gap: 1.5rem;
+        }
+
+        .testimonial-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: 1.75rem;
+            position: relative;
+            transition: all var(--t);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .testimonial-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .testimonial-stars {
+            display: flex;
+            gap: 2px;
+            color: var(--amber-400);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-text {
+            color: var(--text-1);
+            font-size: 0.95rem;
+            margin-bottom: 1.25rem;
+            flex-grow: 1;
+            line-height: 1.7;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .author-avatar {
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .author-info h4 {
+            color: var(--text-1);
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+        .author-info p {
+            color: var(--text-3);
+            font-size: 0.8rem;
+        }
+
+        /* ============ FAQ ============ */
+        .faq { background: var(--surface); }
+
+        .faq-list {
+            max-width: 760px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .faq-item {
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: var(--r-md);
+            overflow: hidden;
+            transition: all var(--t);
+        }
+        .faq-item:hover { border-color: var(--primary-500); }
+
+        .faq-question {
+            width: 100%;
+            background: none;
+            border: none;
+            padding: 1.1rem 1.25rem;
+            text-align: left;
+            color: var(--text-1);
+            font-weight: 600;
+            font-size: 0.98rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+        .faq-question i {
+            color: var(--primary-500);
+            transition: transform var(--t);
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+        .faq-item.active .faq-question i { transform: rotate(180deg); }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height var(--t-slow), padding var(--t);
+            padding: 0 1.25rem;
+            color: var(--text-2);
+            font-size: 0.93rem;
+            line-height: 1.7;
+        }
+        .faq-item.active .faq-answer {
+            max-height: 300px;
+            padding: 0 1.25rem 1.1rem;
+        }
+
+        /* ============ CTA FINAL ============ */
+        .cta-final {
+            background: var(--gradient-primary);
+            color: #fff;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-final::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 20% 30%, rgba(255,255,255,0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(255,255,255,0.1) 0%, transparent 40%);
+            pointer-events: none;
+        }
+        .cta-final .container { position: relative; z-index: 1; }
+        .cta-final h2 {
+            font-size: clamp(1.75rem, 4vw, 2.75rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-wrap: balance;
+            letter-spacing: -0.02em;
+        }
+        .cta-final p {
+            font-size: clamp(1rem, 1.8vw, 1.15rem);
+            max-width: 640px;
+            margin: 0 auto 2rem;
+            opacity: 0.95;
+            text-wrap: pretty;
+        }
+        .cta-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* ============ FOOTER ============ */
+        footer {
+            background: #0a0e1a;
+            color: #cbd5e1;
+            padding: clamp(3rem, 6vw, 4rem) 0 1.5rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr repeat(3, 1fr);
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .footer-brand .nav-brand { color: #fff; margin-bottom: 1rem; }
+        .footer-brand p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            line-height: 1.7;
+            margin-bottom: 1.25rem;
+        }
+
+        .footer-col h4 {
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links li { margin-bottom: 0.6rem; }
+
+        .footer-links a {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            transition: color var(--t);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .footer-links a:hover { color: var(--primary-500); }
+        .footer-links i { color: var(--primary-500); width: 14px; }
+
+        .social-links {
+            display: flex;
+            gap: 0.6rem;
+        }
+        .social-links a {
+            width: 38px; height: 38px;
+            border-radius: var(--r-sm);
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--t);
+        }
+        .social-links a:hover {
+            background: var(--primary-600);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+
+        /* ============ ANIMATIONS ============ */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 1024px) {
+            .hero-grid { grid-template-columns: 1fr; }
+            .hero-preview { order: -1; max-width: 600px; margin: 0 auto; }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: var(--header-h); left: 0; right: 0;
+                background: var(--surface);
+                flex-direction: column;
+                padding: 1.5rem var(--container-px);
+                gap: 0;
+                transform: translateY(-150%);
+                transition: transform var(--t);
+                box-shadow: var(--shadow-md);
+                border-bottom: 1px solid var(--border);
+                z-index: 99;
+            }
+            .nav-links.open { transform: translateY(0); }
+            .nav-links a {
+                display: block;
+                padding: 1rem 0;
+                width: 100%;
+                border-bottom: 1px solid var(--border);
+            }
+            .nav-links a:last-child { border-bottom: none; }
+            .nav-toggle { display: flex; }
+            .nav-cta { display: none; }
+
+            .floating-card { display: none; }
+
+            .price-card.featured { transform: scale(1); }
+            .price-card.featured:hover { transform: translateY(-4px); }
+
+            .footer-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+            .footer-bottom { justify-content: center; text-align: center; }
+        }
+
+        @media (max-width: 480px) {
+            .hero-actions { flex-direction: column; width: 100%; }
+            .hero-actions .btn { width: 100%; }
+            .mockup-stats { grid-template-columns: 1fr; }
+            .cta-actions { flex-direction: column; }
+            .cta-actions .btn { width: 100%; }
+            .brand-text { font-size: 1.1rem; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+            .reveal { opacity: 1; transform: none; }
+            .floating-card { animation: none; }
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Aller au contenu principal</a>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar" aria-label="Navigation principale">
+        <div class="container">
+            <a href="index.html" class="nav-brand" aria-label="LoyerPro — Accueil">
+                <span class="brand-mark"><i class="fas fa-building" aria-hidden="true"></i></span>
+                <span class="brand-text">Loyer<span class="brand-accent">Pro</span></span>
+            </a>
+
+            <ul class="nav-links" id="nav-links">
+                <li><a href="#fonctionnalites">Fonctionnalités</a></li>
+                <li><a href="#modules">Modules</a></li>
+                <li><a href="#tarifs">Tarifs</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="facture-loyer.html">Quittances</a></li>
+                <li><a href="locataire.html">Espace client</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <button class="icon-btn" id="theme-toggle" aria-label="Basculer le mode sombre">
+                    <i class="fas fa-moon" id="theme-icon" aria-hidden="true"></i>
+                </button>
+                <a href="locataire.html" class="nav-cta">
+                    <i class="fas fa-right-to-bracket" aria-hidden="true"></i> Connexion
+                </a>
+                <button class="nav-toggle" id="nav-toggle" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav-links">
+                    <i class="fas fa-bars" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main id="main-content">
+        <!-- Hero -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-grid">
+                    <div class="hero-content">
+                        <span class="hero-badge">
+                            <span class="hero-badge-tag">NOUVEAU</span>
+                            Gestion locative tout-en-un, 100% en ligne
+                        </span>
+                        <h1>
+                            Gérez vos locations<br>
+                            <span class="gradient-text">en toute sérénité</span>
+                        </h1>
+                        <p class="hero-tagline">
+                            LoyerPro centralise quittances, locataires, baux, paiements, états des lieux et fiscalité.
+                            Une plateforme moderne pour les propriétaires et gestionnaires immobiliers.
+                        </p>
+                        <div class="hero-actions">
+                            <a href="facture-loyer.html" class="btn btn-primary">
+                                <i class="fas fa-bolt" aria-hidden="true"></i> Démarrer gratuitement
+                            </a>
+                            <a href="#workflow" class="btn btn-outline">
+                                <i class="fas fa-play" aria-hidden="true"></i> Voir la démo
+                            </a>
+                        </div>
+                        <div class="hero-meta">
+                            <span class="hero-meta-item"><i class="fas fa-check-circle" aria-hidden="true"></i> Sans engagement</span>
+                            <span class="hero-meta-item"><i class="fas fa-check-circle" aria-hidden="true"></i> Conforme loi ALUR</span>
+                            <span class="hero-meta-item"><i class="fas fa-check-circle" aria-hidden="true"></i> Données chiffrées</span>
+                        </div>
+                    </div>
+
+                    <div class="hero-preview">
+                        <div class="dashboard-mockup">
+                            <div class="mockup-header">
+                                <span class="mockup-dot red"></span>
+                                <span class="mockup-dot amber"></span>
+                                <span class="mockup-dot green"></span>
+                                <span class="mockup-title">app.loyerpro.fr/dashboard</span>
+                            </div>
+                            <div class="mockup-body">
+                                <div class="mockup-stats">
+                                    <div class="mockup-stat">
+                                        <div class="mockup-stat-label">Loyers encaissés</div>
+                                        <div class="mockup-stat-value">8,1 M FCFA</div>
+                                        <div class="mockup-stat-trend">↑ 8,2%</div>
+                                    </div>
+                                    <div class="mockup-stat">
+                                        <div class="mockup-stat-label">Impayés</div>
+                                        <div class="mockup-stat-value">2</div>
+                                        <div class="mockup-stat-trend" style="color: var(--rose-500);">↓ 1 ce mois</div>
+                                    </div>
+                                    <div class="mockup-stat">
+                                        <div class="mockup-stat-label">Taux occupation</div>
+                                        <div class="mockup-stat-value">94%</div>
+                                        <div class="mockup-stat-trend">↑ 3%</div>
+                                    </div>
+                                </div>
+                                <div class="mockup-chart">
+                                    <div class="mockup-chart-header">
+                                        <span class="mockup-chart-title">Revenus locatifs</span>
+                                        <span class="mockup-chart-legend">7 derniers mois</span>
+                                    </div>
+                                    <div class="bar-chart">
+                                        <div class="bar"></div>
+                                        <div class="bar"></div>
+                                        <div class="bar"></div>
+                                        <div class="bar"></div>
+                                        <div class="bar"></div>
+                                        <div class="bar"></div>
+                                        <div class="bar"></div>
+                                    </div>
+                                </div>
+                                <div class="mockup-list">
+                                    <div class="mockup-list-item">
+                                        <div class="mockup-avatar">MA</div>
+                                        <span class="mockup-name">Marie Anoukom — Appart. T3</span>
+                                        <span class="mockup-status paid">Payé</span>
+                                    </div>
+                                    <div class="mockup-list-item">
+                                        <div class="mockup-avatar">PD</div>
+                                        <span class="mockup-name">Pierre Doukouwa — Studio</span>
+                                        <span class="mockup-status pending">En attente</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="floating-card top-right">
+                            <span class="floating-icon green"><i class="fas fa-check"></i></span>
+                            Quittance générée
+                        </div>
+                        <div class="floating-card bottom-left">
+                            <span class="floating-icon amber"><i class="fas fa-bell"></i></span>
+                            Alerte impayé
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Bar -->
+        <section class="stats-bar" style="padding-top: clamp(2rem,5vw,3rem); padding-bottom: clamp(2rem,5vw,3rem);">
+            <div class="container">
+                <div class="stats-grid">
+                    <div class="reveal">
+                        <div class="stat-number">2 500+</div>
+                        <div class="stat-label">Propriétaires actifs</div>
+                    </div>
+                    <div class="reveal">
+                        <div class="stat-number">85 000+</div>
+                        <div class="stat-label">Quittances émises</div>
+                    </div>
+                    <div class="reveal">
+                        <div class="stat-number">9,8 Mds</div>
+                        <div class="stat-label">FCFA encaissés</div>
+                    </div>
+                    <div class="reveal">
+                        <div class="stat-number">4,9/5</div>
+                        <div class="stat-label">Satisfaction client</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fonctionnalités principales -->
+        <section class="features" id="fonctionnalites">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-eyebrow"><i class="fas fa-sparkles" aria-hidden="true"></i> Fonctionnalités</span>
+                    <h2 class="section-title">Tout ce dont vous avez besoin pour gérer vos locations</h2>
+                    <p class="section-subtitle">Une suite complète d'outils pensés pour les propriétaires bailleurs et les gestionnaires immobiliers.</p>
+                </div>
+
+                <div class="features-grid">
+                    <article class="feature-card reveal">
+                        <div class="feature-icon indigo"><i class="fas fa-file-invoice-dollar" aria-hidden="true"></i></div>
+                        <h3 class="feature-title">Quittances de loyer</h3>
+                        <p class="feature-desc">Générez des quittances conformes à la loi en moins de 30 secondes, avec code QR de vérification et envoi automatique au locataire.</p>
+                        <span class="feature-tag">PDF + QR Code</span>
+                    </article>
+
+                    <article class="feature-card reveal">
+                        <div class="feature-icon teal"><i class="fas fa-users" aria-hidden="true"></i></div>
+                        <h3 class="feature-title">Gestion des locataires</h3>
+                        <p class="feature-desc">Fiche complète par locataire : coordonnées, documents, historique des paiements, solde de tout compte et correspondances.</p>
+                        <span class="feature-tag">Fichier centralisé</span>
+                    </article>
+
+                    <article class="feature-card reveal">
+                        <div class="feature-icon amber"><i class="fas fa-building" aria-hidden="true"></i></div>
+                        <h3 class="feature-title">Gestion des biens</h3>
+                        <p class="feature-desc">Cataloguez vos appartements, maisons, parkings et locaux commerciaux. Suivez les diagnostics, échéances et travaux par bien.</p>
+                        <span class="feature-tag">Multi-biens</span>
+                    </article>
+
+                    <article class="feature-card reveal">
+                        <div class="feature-icon emerald"><i class="fas fa-money-bill-wave" aria-hidden="true"></i></div>
+                        <h3 class="feature-title">Suivi des paiements</h3>
+                        <p class="feature-desc">Enregistrez les encaissements, relancez automatiquement les impayés et visualisez votre trésorerie locative en temps réel.</p>
+                        <span class="feature-tag">Relances auto</span>
+                    </article>
+
+                    <article class="feature-card reveal">
+                        <div class="feature-icon rose"><i class="fas fa-file-contract" aria-hidden="true"></i></div>
+                        <h3 class="feature-title">Baux & contrats</h3>
+                        <p class="feature-desc">Modèles de contrats de location conformes (vide, meublé, colocation), signature électronique et archivage sécurisé.</p>
+                        <span class="feature-tag">Signature e-ID</span>
+                    </article>
+
+                    <article class="feature-card reveal">
+                        <div class="feature-icon violet"><i class="fas fa-clipboard-check" aria-hidden="true"></i></div>
+                        <h3 class="feature-title">États des lieux</h3>
+                        <p class="feature-desc">Réalisez des états des lieux entrée/sortie depuis votre mobile, avec photos, recommandations et synthèse comparative automatique.</p>
+                        <span class="feature-tag">App mobile</span>
+                    </article>
+
+                    <article class="feature-card reveal">
+                        <div class="feature-icon teal"><i class="fas fa-calculator" aria-hidden="true"></i></div>
+                        <h3 class="feature-title">Charges & provisions</h3>
+                        <p class="feature-desc">Gérez les provisions sur charges, régularisations annuelles et répartitions entre locataires selon les clés de répartition.</p>
+                        <span class="feature-tag">Régularisation auto</span>
+                    </article>
+
+                    <article class="feature-card reveal">
+                        <div class="feature-icon indigo"><i class="fas fa-shield-halved" aria-hidden="true"></i></div>
+                        <h3 class="feature-title">Dépôt de garantie</h3>
+                        <p class="feature-desc">Suivez le dépôt de garantie de chaque bailleur, calculez les retenues et générez le décompte de restitution en un clic.</p>
+                        <span class="feature-tag">Restitution 2 mois</span>
+                    </article>
+
+                    <article class="feature-card reveal">
+                        <div class="feature-icon amber"><i class="fas fa-chart-pie" aria-hidden="true"></i></div>
+                        <h3 class="feature-title">Tableaux de bord</h3>
+                        <p class="feature-desc">Statistiques détaillées : taux d'occupation, rentabilité brute/nette, vacances locatives, impayés et cash-flow par bien.</p>
+                        <span class="feature-tag">Analytics avancés</span>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Modules complémentaires -->
+        <section class="modules" id="modules">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-eyebrow"><i class="fas fa-puzzle-piece" aria-hidden="true"></i> Modules</span>
+                    <h2 class="section-title">Une couverture fonctionnelle complète</h2>
+                    <p class="section-subtitle">LoyerPro intègre tous les modules nécessaires à la gestion locative professionnelle.</p>
+                </div>
+
+                <div class="modules-grid">
+                    <div class="module-item reveal">
+                        <div class="module-check"><i class="fas fa-check"></i></div>
+                        <div class="module-text">Déclaration fiscale automatique<small>Formulaire 2044, 2042, micro-foncier</small></div>
+                    </div>
+                    <div class="module-item reveal">
+                        <div class="module-check"><i class="fas fa-check"></i></div>
+                        <div class="module-text">Assurance loyer impayé<small>Partenariat GLI intégré</small></div>
+                    </div>
+                    <div class="module-item reveal">
+                        <div class="module-check"><i class="fas fa-check"></i></div>
+                        <div class="module-text">Diagnostics obligatoires<small>DPE, gaz, électricité, termites</small></div>
+                    </div>
+                    <div class="module-item reveal">
+                        <div class="module-check"><i class="fas fa-check"></i></div>
+                        <div class="module-text">Multi-comptes &amp; co-propriétés<small>Gestion syndic incluse</small></div>
+                    </div>
+                    <div class="module-item reveal">
+                        <div class="module-check"><i class="fas fa-check"></i></div>
+                        <div class="module-text">Notifications multi-canal<small>Email, SMS, push, WhatsApp</small></div>
+                    </div>
+                    <div class="module-item reveal">
+                        <div class="module-check"><i class="fas fa-check"></i></div>
+                        <div class="module-text">Exports comptables<small>PDF, Excel, CSV, Ciel, Sage</small></div>
+                    </div>
+                    <div class="module-item reveal">
+                        <div class="module-check"><i class="fas fa-check"></i></div>
+                        <div class="module-text">Caisse de prévoyance<small>Calcul retenues, justificatifs</small></div>
+                    </div>
+                    <div class="module-item reveal">
+                        <div class="module-check"><i class="fas fa-check"></i></div>
+                        <div class="module-text">Espace locataire<small>Quittances, documents, messagerie</small></div>
+                    </div>
+                    <div class="module-item reveal">
+                        <div class="module-check"><i class="fas fa-check"></i></div>
+                        <div class="module-text">Travaux &amp; entretien<small>Suivi des devis et factures</small></div>
+                    </div>
+                    <div class="module-item reveal">
+                        <div class="module-check"><i class="fas fa-check"></i></div>
+                        <div class="module-text">Convention de colocation<small>Colocataires &amp; garants</small></div>
+                    </div>
+                    <div class="module-item reveal">
+                        <div class="module-check"><i class="fas fa-check"></i></div>
+                        <div class="module-text">Visite virtuelle 3D<small>Intégration Matterport</small></div>
+                    </div>
+                    <div class="module-item reveal">
+                        <div class="module-check"><i class="fas fa-check"></i></div>
+                        <div class="module-text">API &amp; Webhooks<small>Connexion outils tiers</small></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Workflow -->
+        <section class="workflow" id="workflow">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-eyebrow"><i class="fas fa-route" aria-hidden="true"></i> Comment ça marche</span>
+                    <h2 class="section-title">Démarrez en 4 étapes simples</h2>
+                    <p class="section-subtitle">De l'inscription à la première quittance, moins de 10 minutes suffisent.</p>
+                </div>
+
+                <div class="steps-grid">
+                    <div class="step reveal">
+                        <div class="step-number">1</div>
+                        <h3 class="step-title">Créez votre compte</h3>
+                        <p class="step-desc">Inscrivez-vous gratuitement et ajoutez votre première propriété en quelques clics.</p>
+                    </div>
+                    <div class="step reveal">
+                        <div class="step-number">2</div>
+                        <h3 class="step-title">Importez vos locataires</h3>
+                        <p class="step-desc">Renseignez les informations du bail ou importez un fichier Excel existant.</p>
+                    </div>
+                    <div class="step reveal">
+                        <div class="step-number">3</div>
+                        <h3 class="step-title">Générez vos quittances</h3>
+                        <p class="step-desc">LoyerPro crée des quittances conformes avec QR Code et les envoie automatiquement.</p>
+                    </div>
+                    <div class="step reveal">
+                        <div class="step-number">4</div>
+                        <h3 class="step-title">Suivez vos revenus</h3>
+                        <p class="step-desc">Consultez votre tableau de bord, vos statistiques et vos déclarations fiscales.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tarifs -->
+        <section class="pricing" id="tarifs">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-eyebrow"><i class="fas fa-tag" aria-hidden="true"></i> Tarif</span>
+                    <h2 class="section-title">Une formule unique, simple et transparente</h2>
+                    <p class="section-subtitle">Pas de paliers, pas de surprise. Vous payez <strong>10 % de votre chiffre d'affaires locatif</strong>, prélevé tous les 30 jours.</p>
+                </div>
+
+                <!-- Offre unique -->
+                <div style="max-width:680px;margin:0 auto">
+                    <article class="price-card featured reveal" style="transform:none">
+                        <div class="price-badge">Formule unique</div>
+                        <div class="price-name">Abonnement LoyerPro</div>
+                        <div class="price-desc">Pour tous les propriétaires &amp; bailleurs</div>
+                        <div class="price-value">10 %</div>
+                        <div class="price-period">du chiffre d'affaires locatif — facturé tous les 30 jours</div>
+                        <ul class="price-features" style="text-align:left;max-width:380px;margin:1.5rem auto">
+                            <li><i class="fas fa-check"></i> Biens &amp; locataires illimités</li>
+                            <li><i class="fas fa-check"></i> Quittances illimitées avec QR Code</li>
+                            <li><i class="fas fa-check"></i> Suivi des paiements &amp; relances auto</li>
+                            <li><i class="fas fa-check"></i> Baux &amp; signature électronique</li>
+                            <li><i class="fas fa-check"></i> États des lieux mobile</li>
+                            <li><i class="fas fa-check"></i> Diagnostics &amp; fiscalité automatisée</li>
+                            <li><i class="fas fa-check"></i> Support WhatsApp 7j/7</li>
+                            <li><i class="fas fa-check"></i> 30 premiers jours offerts</li>
+                        </ul>
+
+                        <!-- Calculateur -->
+                        <div style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:12px;padding:1.25rem;margin-bottom:1.5rem;backdrop-filter:blur(10px)">
+                            <div style="color:#fff;font-size:.85rem;font-weight:600;margin-bottom:.5rem;text-align:left"><i class="fas fa-calculator"></i> Simulez votre abonnement</div>
+                            <input type="number" id="home-calc-revenue" placeholder="Votre CA locatif mensuel (FCFA)" min="0" step="1000" style="width:100%;padding:.75rem;border:none;border-radius:8px;font-size:.95rem;margin-bottom:.75rem;font-family:inherit" oninput="calculateHomeSubscription()">
+                            <div style="background:#fff;border-radius:8px;padding:.85rem;text-align:center;color:#0f172a">
+                                <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;color:#94a3b8;margin-bottom:4px">Abonnement tous les 30 jours</div>
+                                <div id="home-calc-amount" style="font-size:1.5rem;font-weight:800;color:#4f46e5">0 FCFA</div>
+                                <div id="home-calc-detail" style="font-size:.78rem;color:#94a3b8;margin-top:4px">Saisissez votre CA locatif mensuel</div>
+                            </div>
+                        </div>
+
+                        <a href="inscription.html" class="btn price-cta">Démarrer — 30 jours offerts</a>
+                        <div style="text-align:center;margin-top:1rem;font-size:.8rem;opacity:.9">Paiement carte 💳 (CVL2 Togo) · Sans engagement</div>
+                    </article>
+
+                    <!-- Encart bailleur ajoute ses locataires -->
+                    <div class="reveal" style="background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:1.5rem;margin-top:1.5rem">
+                        <h3 style="font-size:1.05rem;font-weight:700;color:var(--text-1);margin-bottom:.75rem;display:flex;align-items:center;gap:8px">
+                            <i class="fas fa-users" style="color:var(--primary-600)"></i> Vous ajoutez vos propres locataires
+                        </h3>
+                        <p style="color:var(--text-2);font-size:.92rem;line-height:1.6">
+                            Après inscription, le bailleur crée la fiche de chacun de ses locataires (nom, contact, bien occupé, montant du loyer, période du bail). C'est sur la base de ces loyers encaissés que l'abonnement mensuel de 10 % est calculé et prélevé tous les 30 jours. Plus votre patrimoine génère, plus LoyerPro vous accompagne — sans frais cachés.
+                        </p>
+                        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.75rem;margin-top:1rem">
+                            <div style="display:flex;align-items:center;gap:8px;font-size:.85rem;color:var(--text-2)"><i class="fas fa-circle-check" style="color:var(--emerald-500)"></i> Ajout illimité de locataires</div>
+                            <div style="display:flex;align-items:center;gap:8px;font-size:.85rem;color:var(--text-2)"><i class="fas fa-circle-check" style="color:var(--emerald-500)"></i> Calcul automatique</div>
+                            <div style="display:flex;align-items:center;gap:8px;font-size:.85rem;color:var(--text-2)"><i class="fas fa-circle-check" style="color:var(--emerald-500)"></i> Facture détaillée tous les 30 jours</div>
+                            <div style="display:flex;align-items:center;gap:8px;font-size:.85rem;color:var(--text-2)"><i class="fas fa-circle-check" style="color:var(--emerald-500)"></i> Paiement par carte 💳 (CVL2 Togo)</div>
+                        </div>
+                    </div>
+
+                    <!-- Encart procédure paiement + 24h -->
+                    <div class="reveal" style="background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:1.5rem;margin-top:1.5rem">
+                        <h3 style="font-size:1.05rem;font-weight:700;color:var(--text-1);margin-bottom:1rem;display:flex;align-items:center;gap:8px">
+                            <i class="fas fa-credit-card" style="color:var(--primary-600)"></i> Paiement &amp; activation de votre compte
+                        </h3>
+                        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:1rem;margin-bottom:1rem">
+                            <div style="text-align:center;padding:1rem;background:var(--surface-2);border-radius:var(--r-md)">
+                                <div style="width:40px;height:40px;border-radius:50%;background:var(--primary-600);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;margin:0 auto .5rem">1</div>
+                                <strong style="display:block;color:var(--text-1);font-size:.9rem">Inscription</strong>
+                                <span style="font-size:.8rem;color:var(--text-2)">Remplissez le formulaire en 3 étapes</span>
+                            </div>
+                            <div style="text-align:center;padding:1rem;background:var(--surface-2);border-radius:var(--r-md)">
+                                <div style="width:40px;height:40px;border-radius:50%;background:var(--primary-600);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;margin:0 auto .5rem">2</div>
+                                <strong style="display:block;color:var(--text-1);font-size:.9rem">Paiement par carte 💳</strong>
+                                <span style="font-size:.8rem;color:var(--text-2)">Via <a href="https://cvl2togo.netlify.app/" target="_blank" rel="noopener" style="color:var(--primary-600)">CVL2 Togo</a> — précisez nom et statut</span>
+                            </div>
+                            <div style="text-align:center;padding:1rem;background:var(--surface-2);border-radius:var(--r-md)">
+                                <div style="width:40px;height:40px;border-radius:50%;background:var(--amber-500);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;margin:0 auto .5rem">3</div>
+                                <strong style="display:block;color:var(--text-1);font-size:.9rem">Vérification sous 24 h</strong>
+                                <span style="font-size:.8rem;color:var(--text-2)">Notre équipe valide votre paiement</span>
+                            </div>
+                            <div style="text-align:center;padding:1rem;background:var(--surface-2);border-radius:var(--r-md)">
+                                <div style="width:40px;height:40px;border-radius:50%;background:var(--emerald-500);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;margin:0 auto .5rem">4</div>
+                                <strong style="display:block;color:var(--text-1);font-size:.9rem">Identifiants définitifs</strong>
+                                <span style="font-size:.8rem;color:var(--text-2)">Nouvel identifiant + mot de passe par WhatsApp</span>
+                            </div>
+                        </div>
+                        <div style="display:flex;gap:.75rem;flex-wrap:wrap;justify-content:center">
+                            <a href="inscription.html" class="btn btn-primary"><i class="fas fa-rocket"></i> Démarrer l'inscription</a>
+                            <a href="https://cvl2togo.netlify.app/" target="_blank" rel="noopener" class="btn btn-outline" style="color:var(--text-1);border-color:var(--border-strong)"><i class="fas fa-credit-card"></i> Payer par carte 💳</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Témoignages -->
+        <section class="testimonials" id="temoignages">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-eyebrow"><i class="fas fa-star" aria-hidden="true"></i> Témoignages</span>
+                    <h2 class="section-title">Ils ont transformé leur gestion locative</h2>
+                    <p class="section-subtitle">Plus de 2 500 propriétaires et gestionnaires nous font confiance au quotidien.</p>
+                </div>
+
+                <div class="testimonials-grid">
+                    <article class="testimonial-card reveal">
+                        <div class="testimonial-stars">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <p class="testimonial-text">"Depuis LoyerPro, j'ai divisé par 3 le temps passé à la gestion de mes 8 appartements. Les relances automatiques m'ont sauvé. Plus aucun impayé depuis 6 mois !"</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">MA</div>
+                            <div class="author-info">
+                                <h4>Marie ANOUKOUM</h4>
+                                <p>Propriétaire de 8 appartements</p>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="testimonial-card reveal">
+                        <div class="testimonial-stars">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <p class="testimonial-text">"La signature électronique des baux et la génération des quittances en QR Code sont des game-changers. Mes locataires adorent. Interface vraiment moderne."</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">PD</div>
+                            <div class="author-info">
+                                <h4>Pierre DOUKOUWA</h4>
+                                <p>Gestionnaire immobilier, Doukouwa Immo</p>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="testimonial-card reveal">
+                        <div class="testimonial-stars">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <p class="testimonial-text">"Le module de déclaration fiscale automatique m'évite des heures de paperasse chaque année. Les exports pour mon comptable sont parfaits."</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">SL</div>
+                            <div class="author-info">
+                                <h4>Sophie LAMBERT</h4>
+                                <p>Propriétaire bailleur, 22 biens</p>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="faq" id="faq">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-eyebrow"><i class="fas fa-circle-question" aria-hidden="true"></i> FAQ</span>
+                    <h2 class="section-title">Questions fréquentes</h2>
+                    <p class="section-subtitle">Tout ce que vous devez savoir avant de vous lancer.</p>
+                </div>
+
+                <div class="faq-list">
+                    <div class="faq-item reveal">
+                        <button class="faq-question" aria-expanded="false">
+                            Les quittances sont-elles conformes à la loi ?
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            Oui, toutes les quittances générées par LoyerPro incluent les mentions obligatoires prévues par la loi ALUR : identité du bailleur et du locataire, adresse du bien, période concernée, montant du loyer et des charges, date et signature. Chaque quittance comporte également un QR Code unique permettant sa vérification en ligne.
+                        </div>
+                    </div>
+                    <div class="faq-item reveal">
+                        <button class="faq-question" aria-expanded="false">
+                            Mes données sont-elles sécurisées ?
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            Vos données sont chiffrées en transit (TLS 1.3) et au repos (AES-256). Elles sont hébergées dans des datacenters certifiés ISO 27001 et RGPD-conformes. Nous réalisons des sauvegardes quotidiennes et des audits de sécurité réguliers.
+                        </div>
+                    </div>
+                    <div class="faq-item reveal">
+                        <button class="faq-question" aria-expanded="false">
+                            Puis-je importer mes données existantes ?
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            Absolument. Vous pouvez importer vos biens et locataires depuis Excel, CSV, ou depuis les principaux logiciels immobiliers (Apimo, Périclès, Hektor). Notre équipe support peut également réaliser l'import pour vous, sans frais supplémentaire.
+                        </div>
+                    </div>
+                    <div class="faq-item reveal">
+                        <button class="faq-question" aria-expanded="false">
+                            L'application fonctionne-t-elle sur mobile ?
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            Oui, LoyerPro est une application web responsive, accessible depuis n'importe quel appareil (smartphone, tablette, ordinateur). Une application mobile native iOS et Android est également disponible pour les états des lieux et les notifications push.
+                        </div>
+                    </div>
+                    <div class="faq-item reveal">
+                        <button class="faq-question" aria-expanded="false">
+                            Quel est le délai pour démarrer ?
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            La création du compte prend moins de 2 minutes. L'ajout de votre premier bien et locataire environ 5 minutes. Vous pouvez générer votre première quittance en moins de 10 minutes après inscription, sans formation préalable.
+                        </div>
+                    </div>
+                    <div class="faq-item reveal">
+                        <button class="faq-question" aria-expanded="false">
+                            Puis-je résilier à tout moment ?
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            Oui, sans engagement ni frais de résiliation. Vous pouvez exporter toutes vos données à tout moment (PDF, Excel, CSV) et supprimer votre compte définitivement. Nous conservons vos données 90 jours après résiliation, puis elles sont définitivement effacées.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Final -->
+        <section class="cta-final">
+            <div class="container">
+                <h2>Prêt à digitaliser votre gestion locative ?</h2>
+                <p>Rejoignez plus de 2 500 propriétaires qui ont simplifié leur quotidien avec LoyerPro. 30 jours offerts, paiement par carte 💳 via CVL2 Togo, identifiants définitifs sous 24 h.</p>
+                <div class="cta-actions">
+                    <a href="inscription.html" class="btn btn-white">
+                        <i class="fas fa-rocket" aria-hidden="true"></i> Démarrer gratuitement
+                    </a>
+                    <a href="locataire.html" class="btn btn-ghost">
+                        <i class="fas fa-right-to-bracket" aria-hidden="true"></i> Espace client
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="nav-brand">
+                        <span class="brand-mark"><i class="fas fa-building" aria-hidden="true"></i></span>
+                        <span>LoyerPro</span>
+                    </a>
+                    <p>La plateforme tout-en-un de gestion locative pour propriétaires bailleurs et gestionnaires immobiliers. Conforme, sécurisée, moderne.</p>
+                    <div class="social-links">
+                        <a href="https://wa.me/22892871605" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
+                        <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
+                        <a href="https://twitter.com" target="_blank" rel="noopener" aria-label="Twitter"><i class="fab fa-x-twitter" aria-hidden="true"></i></a>
+                        <a href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
+                        <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Produit</h4>
+                    <ul class="footer-links">
+                        <li><a href="#fonctionnalites"><i class="fas fa-chevron-right"></i> Fonctionnalités</a></li>
+                        <li><a href="#modules"><i class="fas fa-chevron-right"></i> Modules</a></li>
+                        <li><a href="#tarifs"><i class="fas fa-chevron-right"></i> Tarifs</a></li>
+                        <li><a href="dashboard.html"><i class="fas fa-chevron-right"></i> Dashboard</a></li>
+                        <li><a href="facture-loyer.html"><i class="fas fa-chevron-right"></i> Quittances</a></li>
+                        <li><a href="etats-des-lieux.html"><i class="fas fa-chevron-right"></i> États des lieux</a></li>
+                        <li><a href="baux.html"><i class="fas fa-chevron-right"></i> Baux</a></li>
+                        <li><a href="diagnostics.html"><i class="fas fa-chevron-right"></i> Diagnostics</a></li>
+                        <li><a href="fiscalite.html"><i class="fas fa-chevron-right"></i> Fiscalité</a></li>
+                        <li><a href="abonnement.html"><i class="fas fa-chevron-right"></i> Abonnement</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Ressources</h4>
+                    <ul class="footer-links">
+                        <li><a href="blog.html"><i class="fas fa-chevron-right"></i> Blog</a></li>
+                        <li><a href="support.html"><i class="fas fa-chevron-right"></i> Centre d'aide</a></li>
+                        <li><a href="chat.html"><i class="fas fa-chevron-right"></i> Support / Chat</a></li>
+                        <li><a href="notifications.html"><i class="fas fa-chevron-right"></i> Notifications</a></li>
+                        <li><a href="relances.html"><i class="fas fa-chevron-right"></i> Relances impayés</a></li>
+                        <li><a href="parametres.html"><i class="fas fa-chevron-right"></i> Paramètres</a></li>
+                        <li><a href="profil.html"><i class="fas fa-chevron-right"></i> Mon profil</a></li>
+                        <li><a href="cgu.html"><i class="fas fa-chevron-right"></i> CGU</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <ul class="footer-links">
+                        <li><a href="https://wa.me/22892871605" target="_blank" rel="noopener"><i class="fab fa-whatsapp" style="color:#25D366"></i> +228 92 87 16 05</a></li>
+                        <li><a href="mailto:jeanskodoc22@gmail.com"><i class="fas fa-envelope"></i> jeanskodoc22@gmail.com</a></li>
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Rue du Commerce,<br>DIGITALE EXPERT</li>
+                        <li><a href="chat.html"><i class="fas fa-chevron-right"></i> Nous écrire</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 LoyerPro. Tous droits réservés.</p>
+                <p>
+                    <a href="mentions-legales.html" style="color:#94a3b8;">Mentions légales</a> &nbsp;·&nbsp;
+                    <a href="confidentialite.html" style="color:#94a3b8;">Confidentialité</a> &nbsp;·&nbsp;
+                    <a href="cgu.html" style="color:#94a3b8;">CGU</a> &nbsp;·&nbsp;
+                    <a href="rgpd.html" style="color:#94a3b8;">RGPD</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Navigation scroll effect
+        const navbar = document.getElementById('navbar');
+        const navToggle = document.getElementById('nav-toggle');
+        const navLinks = document.getElementById('nav-links');
+
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 20);
+        }, { passive: true });
+
+        // Menu mobile
+        const toggleMenu = () => {
+            const isOpen = navLinks.classList.toggle('open');
+            navToggle.setAttribute('aria-expanded', isOpen);
+            navToggle.innerHTML = isOpen
+                ? '<i class="fas fa-times" aria-hidden="true"></i>'
+                : '<i class="fas fa-bars" aria-hidden="true"></i>';
+            navToggle.setAttribute('aria-label', isOpen ? 'Fermer le menu' : 'Ouvrir le menu');
+        };
+        navToggle.addEventListener('click', toggleMenu);
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => navLinks.classList.contains('open') && toggleMenu());
+        });
+        document.addEventListener('click', (e) => {
+            if (!navbar.contains(e.target) && navLinks.classList.contains('open')) toggleMenu();
+        });
+
+        // Mode sombre
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+        const savedTheme = localStorage.getItem('theme');
+
+        if (savedTheme === 'dark' || (!savedTheme && prefersDark.matches)) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            themeIcon.classList.replace('fa-moon', 'fa-sun');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            if (isDark) {
+                document.documentElement.removeAttribute('data-theme');
+                themeIcon.classList.replace('fa-sun', 'fa-moon');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeIcon.classList.replace('fa-moon', 'fa-sun');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        // Animations au scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // FAQ accordéon
+        document.querySelectorAll('.faq-question').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const item = btn.parentElement;
+                const isActive = item.classList.contains('active');
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+                document.querySelectorAll('.faq-question').forEach(q => q.setAttribute('aria-expanded', 'false'));
+                if (!isActive) {
+                    item.classList.add('active');
+                    btn.setAttribute('aria-expanded', 'true');
+                }
+            });
+        });
+
+        // === Calculateur d'abonnement — 10 % du CA locatif, tous les 30 jours ===
+        function calculateHomeSubscription() {
+            const input = document.getElementById('home-calc-revenue');
+            const amountEl = document.getElementById('home-calc-amount');
+            const detailEl = document.getElementById('home-calc-detail');
+            if (!input || !amountEl || !detailEl) return;
+            const revenue = parseFloat(input.value) || 0;
+            const fmt = n => new Intl.NumberFormat('fr-FR').format(n) + ' FCFA';
+            if (revenue <= 0) {
+                amountEl.textContent = '0 FCFA';
+                detailEl.textContent = 'Saisissez votre CA locatif mensuel';
+                return;
+            }
+            const subscription = Math.round(revenue * 0.10);
+            amountEl.textContent = fmt(subscription);
+            detailEl.innerHTML = '10 % de <strong>' + fmt(revenue) + '</strong> · Facturé tous les 30 jours';
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                const target = document.querySelector(targetId);
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+<script src="db.js"></script>
+<script src="auth.js"></script>
+<script src="navbar-auth.js"></script>
+<script src="auto-save.js"></script>
+<script src="whatsapp-float.js"></script>
+</body>
+</html>

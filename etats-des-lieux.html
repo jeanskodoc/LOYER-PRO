@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="États des lieux entrée et sortie — LoyerPro. Réalisez, comparez et archivez vos états des lieux en toute simplicité.">
+    <meta name="theme-color" content="#4f46e5">
+    <title>États des lieux — LoyerPro</title>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary-50:#eef2ff;--primary-100:#e0e7ff;--primary-500:#6366f1;--primary-600:#4f46e5;--primary-700:#4338ca;
+            --teal-500:#14b8a6;--amber-400:#fbbf24;--amber-500:#f59e0b;--amber-600:#d97706;
+            --rose-500:#f43f5e;--emerald-500:#10b981;
+            --text-1:#0f172a;--text-2:#475569;--text-3:#94a3b8;
+            --bg:#f8fafc;--surface:#fff;--surface-2:#f1f5f9;--surface-3:#e2e8f0;
+            --border:#e2e8f0;--border-strong:#cbd5e1;
+            --r-sm:8px;--r-md:12px;--r-lg:18px;--r-xl:28px;--r-full:999px;
+            --shadow-xs:0 1px 2px rgba(15,23,42,.05);--shadow-sm:0 2px 8px rgba(15,23,42,.06);
+            --shadow-md:0 8px 24px rgba(15,23,42,.08);--shadow-lg:0 20px 48px rgba(15,23,42,.12);
+            --shadow-glow:0 8px 32px rgba(99,102,241,.25);
+            --container-max:1240px;--container-px:clamp(1rem,5vw,2rem);--header-h:72px;
+            --t:.3s cubic-bezier(.4,0,.2,1);
+            --gradient-primary:linear-gradient(135deg,#6366f1 0%,#8b5cf6 50%,#ec4899 100%);
+        }
+        [data-theme="dark"]{
+            --text-1:#f1f5f9;--text-2:#cbd5e1;--text-3:#64748b;
+            --bg:#0a0e1a;--surface:#131826;--surface-2:#1a2030;--surface-3:#242b3d;
+            --border:#242b3d;--border-strong:#334155;
+            --shadow-sm:0 2px 8px rgba(0,0,0,.4);--shadow-md:0 8px 24px rgba(0,0,0,.5);--shadow-lg:0 20px 48px rgba(0,0,0,.6);
+        }
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+        body{background:var(--bg);color:var(--text-1);font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.6;overflow-x:hidden;transition:background-color var(--t),color var(--t);-webkit-font-smoothing:antialiased}
+        a{color:inherit;text-decoration:none}
+        ul{list-style:none}
+        button{font-family:inherit}
+        img{max-width:100%;display:block}
+        :focus-visible{outline:3px solid var(--primary-500);outline-offset:3px;border-radius:4px}
+        .container{width:100%;max-width:var(--container-max);margin:0 auto;padding:0 var(--container-px)}
+
+        /* ============= NAVBAR ============= */
+        .navbar{position:fixed;top:0;left:0;right:0;height:var(--header-h);background:rgba(255,255,255,.8);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);z-index:100;transition:all var(--t);border-bottom:1px solid transparent}
+        [data-theme="dark"] .navbar{background:rgba(19,24,38,.85)}
+        .navbar.scrolled{border-bottom-color:var(--border);box-shadow:var(--shadow-sm)}
+        .navbar .container{height:100%;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+        .nav-brand{display:flex;align-items:center;gap:10px;font-size:1.35rem;font-weight:800;letter-spacing:-.02em}
+        .brand-mark{width:38px;height:38px;border-radius:var(--r-sm);background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.1rem;box-shadow:var(--shadow-glow)}
+        .brand-text{color:var(--text-1)}
+        .brand-accent{background:var(--gradient-primary);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+        .nav-links{display:flex;gap:clamp(1rem,2vw,2rem);align-items:center}
+        .nav-links a{color:var(--text-2);font-weight:500;font-size:.95rem;transition:color var(--t);position:relative}
+        .nav-links a::after{content:'';position:absolute;bottom:-6px;left:0;width:0;height:2px;background:var(--primary-500);transition:width var(--t);border-radius:2px}
+        .nav-links a:hover{color:var(--text-1)}
+        .nav-links a:hover::after{width:100%}
+        .nav-links a.active{color:var(--primary-600);font-weight:600}
+        .nav-links a.active::after{width:100%}
+        .nav-actions{display:flex;align-items:center;gap:.5rem}
+        .icon-btn{background:var(--surface-2);border:none;color:var(--text-1);width:40px;height:40px;border-radius:var(--r-sm);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;transition:all var(--t);position:relative}
+        .icon-btn:hover{background:var(--primary-50);color:var(--primary-600)}
+        [data-theme="dark"] .icon-btn:hover{background:rgba(99,102,241,.15)}
+        .nav-cta{background:var(--primary-600);color:#fff;padding:10px 20px;border-radius:var(--r-full);font-weight:600;font-size:.9rem;transition:all var(--t);display:inline-flex;align-items:center;gap:6px}
+        .nav-cta:hover{background:var(--primary-700);transform:translateY(-1px);box-shadow:var(--shadow-glow)}
+        .nav-toggle{display:none;background:var(--surface-2);border:none;color:var(--text-1);font-size:1.25rem;cursor:pointer;width:44px;height:44px;border-radius:var(--r-sm);align-items:center;justify-content:center}
+
+        /* ============= PAGE ============= */
+        .page{padding-top:calc(var(--header-h) + 24px);padding-bottom:4rem;min-height:100vh}
+        .breadcrumb{display:flex;align-items:center;gap:.5rem;font-size:.85rem;color:var(--text-3);margin-bottom:.75rem;flex-wrap:wrap}
+        .breadcrumb a{color:var(--text-2);transition:color var(--t)}
+        .breadcrumb a:hover{color:var(--primary-600)}
+        .breadcrumb i{font-size:.6rem;opacity:.6}
+        .breadcrumb .current{color:var(--text-1);font-weight:600}
+
+        .page-head{margin-bottom:1.75rem}
+        .page-head h1{font-size:clamp(1.6rem,3.5vw,2.25rem);font-weight:800;letter-spacing:-.025em;color:var(--text-1);line-height:1.15}
+        .page-head h1 .accent{background:var(--gradient-primary);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+        .page-head p{color:var(--text-2);font-size:.98rem;margin-top:.5rem;max-width:60ch}
+
+        /* Stats */
+        .summary-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:.9rem;margin-bottom:1.75rem}
+        .summary-chip{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:1.1rem 1.2rem;display:flex;align-items:center;gap:.9rem;box-shadow:var(--shadow-xs);transition:all var(--t)}
+        .summary-chip:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+        .summary-chip .chip-ic{width:42px;height:42px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;color:#fff;font-size:1rem;flex-shrink:0}
+        .chip-ic.indigo{background:linear-gradient(135deg,#6366f1,#8b5cf6)}
+        .chip-ic.emerald{background:linear-gradient(135deg,#10b981,#14b8a6)}
+        .chip-ic.amber{background:linear-gradient(135deg,#f59e0b,#f97316)}
+        .chip-ic.rose{background:linear-gradient(135deg,#f43f5e,#ec4899)}
+        .chip-meta{min-width:0}
+        .chip-meta .lbl{font-size:.72rem;color:var(--text-3);text-transform:uppercase;letter-spacing:.04em}
+        .chip-meta .val{font-size:1.35rem;font-weight:800;color:var(--text-1);line-height:1.1;letter-spacing:-.01em}
+        .chip-meta .sub{font-size:.75rem;color:var(--text-3);margin-top:2px}
+
+        /* ============= TOOLBAR ============= */
+        .toolbar{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:1rem;box-shadow:var(--shadow-sm);display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;margin-bottom:1.5rem}
+        .toolbar-left{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;flex:1;min-width:0}
+        .filter-select{padding:.7rem 2.2rem .7rem .9rem;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface-2);color:var(--text-1);font-size:.9rem;cursor:pointer;transition:all var(--t);min-height:44px;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");background-repeat:no-repeat;background-position:right .8rem center}
+        .filter-select:focus{outline:none;border-color:var(--primary-500);background-color:var(--surface);box-shadow:0 0 0 3px var(--primary-50)}
+        [data-theme="dark"] .filter-select:focus{box-shadow:0 0 0 3px rgba(99,102,241,.2)}
+        .filter-select:hover{border-color:var(--border-strong)}
+
+        .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;padding:.75rem 1.25rem;border-radius:var(--r-full);font-weight:600;font-size:.9rem;text-decoration:none;transition:all var(--t);min-height:44px;border:2px solid transparent;cursor:pointer;white-space:nowrap}
+        .btn-primary{background:var(--primary-600);color:#fff}
+        .btn-primary:hover{background:var(--primary-700);transform:translateY(-1px);box-shadow:var(--shadow-glow)}
+        .btn-outline{background:transparent;color:var(--text-1);border-color:var(--border-strong)}
+        .btn-outline:hover{border-color:var(--primary-500);color:var(--primary-600);background:var(--primary-50)}
+        [data-theme="dark"] .btn-outline:hover{background:rgba(99,102,241,.1)}
+        .btn-whatsapp{background:#25D366;color:#fff}
+        .btn-whatsapp:hover{background:#1da851;transform:translateY(-1px);box-shadow:0 8px 24px rgba(37,211,102,.35)}
+        .btn-ghost{background:transparent;color:var(--text-2);padding:.5rem .9rem}
+        .btn-ghost:hover{background:var(--surface-2);color:var(--text-1)}
+
+        /* ============= SECTION TITLE ============= */
+        .section-title{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin:2.5rem 0 1.25rem;flex-wrap:wrap}
+        .section-title h2{font-size:clamp(1.25rem,2.5vw,1.6rem);font-weight:800;letter-spacing:-.02em;color:var(--text-1);display:flex;align-items:center;gap:.6rem}
+        .section-title h2 i{color:var(--primary-500);font-size:1.1rem}
+        .section-title p{color:var(--text-3);font-size:.88rem;margin-top:.25rem}
+        .section-title .lead{display:flex;flex-direction:column}
+
+        /* ============= STATE CARDS ============= */
+        .states-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:1.1rem}
+        .state-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.3rem;box-shadow:var(--shadow-sm);transition:all var(--t);position:relative;overflow:hidden;animation:cardIn .4s cubic-bezier(.4,0,.2,1) both}
+        @keyframes cardIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+        .state-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);border-color:var(--primary-500)}
+        .state-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--gradient-primary);opacity:0;transition:opacity var(--t)}
+        .state-card:hover::before{opacity:1}
+        .state-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem;margin-bottom:1rem}
+        .state-type{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:var(--r-full);font-size:.74rem;font-weight:700;letter-spacing:.02em}
+        .state-type.entry{background:rgba(99,102,241,.15);color:var(--primary-600)}
+        [data-theme="dark"] .state-type.entry{background:rgba(129,140,248,.18);color:#a5b4fc}
+        .state-type.exit{background:rgba(245,158,11,.18);color:var(--amber-600)}
+        [data-theme="dark"] .state-type.exit{background:rgba(251,191,36,.2);color:#fcd34d}
+        .state-status{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:var(--r-full);font-size:.72rem;font-weight:700}
+        .state-status::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;animation:pulseDot 2s ease-in-out infinite}
+        @keyframes pulseDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+        .state-status.done{background:rgba(16,185,129,.15);color:var(--emerald-500)}
+        [data-theme="dark"] .state-status.done{background:rgba(16,185,129,.18);color:#34d399}
+        .state-status.progress{background:rgba(245,158,11,.18);color:var(--amber-600)}
+        [data-theme="dark"] .state-status.progress{background:rgba(251,191,36,.2);color:#fcd34d}
+        .state-info{display:flex;flex-direction:column;gap:.5rem}
+        .state-row{display:flex;align-items:center;gap:.65rem;font-size:.88rem;color:var(--text-2)}
+        .state-row i{color:var(--text-3);width:18px;text-align:center;flex-shrink:0}
+        .state-row strong{color:var(--text-1);font-weight:600}
+        .state-prop{font-size:1.05rem;font-weight:700;color:var(--text-1);letter-spacing:-.01em;margin-bottom:.2rem}
+        .state-photos{display:flex;align-items:center;gap:.5rem;margin-top:.75rem;padding-top:.85rem;border-top:1px solid var(--border);flex-wrap:wrap}
+        .photo-thumb{width:34px;height:34px;border-radius:var(--r-sm);background:var(--surface-2);display:flex;align-items:center;justify-content:center;color:var(--text-3);font-size:.8rem;overflow:hidden}
+        .photo-thumb.g0{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff}
+        .photo-thumb.g1{background:linear-gradient(135deg,#14b8a6,#06b6d4);color:#fff}
+        .photo-thumb.g2{background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff}
+        .photo-thumb.g3{background:linear-gradient(135deg,#f43f5e,#ec4899);color:#fff}
+        .photo-count{font-size:.78rem;color:var(--text-3);font-weight:500}
+        .state-actions{display:flex;gap:.5rem;margin-top:1rem}
+        .state-actions .btn{flex:1;padding:.55rem .8rem;min-height:38px;font-size:.82rem}
+
+        /* ============= STEPS ============= */
+        .steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:1.25rem}
+        .step-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.5rem;box-shadow:var(--shadow-sm);transition:all var(--t);position:relative}
+        .step-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+        .step-num{position:absolute;top:1.25rem;right:1.25rem;font-size:2.6rem;font-weight:900;color:var(--surface-3);line-height:1;-webkit-background-clip:text;background-clip:text}
+        .step-ic{width:48px;height:48px;border-radius:var(--r-md);background:var(--primary-50);color:var(--primary-600);display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:1rem}
+        [data-theme="dark"] .step-ic{background:rgba(99,102,241,.15)}
+        .step-card h3{font-size:1.1rem;font-weight:700;color:var(--text-1);margin-bottom:.4rem;letter-spacing:-.01em}
+        .step-card p{font-size:.88rem;color:var(--text-2);line-height:1.55}
+
+        /* ============= TEMPLATES ============= */
+        .templates-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:1.1rem}
+        .tpl-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.5rem;box-shadow:var(--shadow-sm);transition:all var(--t);overflow:hidden;position:relative}
+        .tpl-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);border-color:var(--primary-500)}
+        .tpl-head{display:flex;align-items:center;gap:.85rem;margin-bottom:.9rem}
+        .tpl-ic{width:46px;height:46px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.15rem;flex-shrink:0}
+        .tpl-ic.g0{background:linear-gradient(135deg,#6366f1,#8b5cf6)}
+        .tpl-ic.g1{background:linear-gradient(135deg,#14b8a6,#06b6d4)}
+        .tpl-ic.g2{background:linear-gradient(135deg,#f59e0b,#f97316)}
+        .tpl-card h3{font-size:1.05rem;font-weight:700;color:var(--text-1);letter-spacing:-.01em}
+        .tpl-card .tpl-sub{font-size:.78rem;color:var(--text-3);margin-top:1px}
+        .tpl-card p{font-size:.86rem;color:var(--text-2);line-height:1.55;margin-bottom:1rem}
+        .tpl-tags{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem}
+        .tpl-tag{font-size:.72rem;font-weight:600;padding:3px 9px;border-radius:var(--r-full);background:var(--surface-2);color:var(--text-2)}
+        .tpl-card .btn{width:100%}
+
+        /* ============= CTA SECTION ============= */
+        .cta-section{margin-top:3rem;background:var(--gradient-primary);border-radius:var(--r-xl);padding:clamp(2rem,5vw,3.5rem);color:#fff;position:relative;overflow:hidden;box-shadow:var(--shadow-lg)}
+        .cta-section::before{content:'';position:absolute;top:-40%;right:-10%;width:50%;height:200%;background:radial-gradient(circle,rgba(255,255,255,.18),transparent 70%);pointer-events:none}
+        .cta-section::after{content:'';position:absolute;bottom:-50%;left:-10%;width:45%;height:180%;background:radial-gradient(circle,rgba(255,255,255,.12),transparent 70%);pointer-events:none}
+        .cta-inner{position:relative;z-index:1;max-width:640px}
+        .cta-section h2{font-size:clamp(1.4rem,3vw,1.9rem);font-weight:800;letter-spacing:-.02em;margin-bottom:.6rem}
+        .cta-section p{font-size:1rem;opacity:.92;margin-bottom:1.5rem;line-height:1.6}
+        .cta-section .btn{background:#fff;color:var(--primary-700);font-weight:700}
+        .cta-section .btn:hover{background:#f8fafc;transform:translateY(-2px);box-shadow:0 12px 32px rgba(0,0,0,.25)}
+        .cta-section .btn-whatsapp-cta{background:#25D366;color:#fff;margin-left:.6rem}
+        .cta-section .btn-whatsapp-cta:hover{background:#1da851;box-shadow:0 12px 32px rgba(37,211,102,.5)}
+
+        /* ============= TOAST ============= */
+        .toast-container{position:fixed;bottom:1.5rem;right:1.5rem;z-index:300;display:flex;flex-direction:column;gap:.6rem;pointer-events:none;max-width:min(360px,calc(100vw - 2rem))}
+        .toast{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:.85rem 1rem;display:flex;align-items:center;gap:.7rem;box-shadow:var(--shadow-lg);pointer-events:auto;animation:toastIn .35s cubic-bezier(.4,0,.2,1) both;position:relative;overflow:hidden;min-width:260px}
+        .toast::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--primary-500)}
+        .toast.success::before{background:var(--emerald-500)}
+        .toast.info::before{background:var(--primary-500)}
+        @keyframes toastIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+        .toast.hide{animation:toastOut .3s ease forwards}
+        @keyframes toastOut{to{opacity:0;transform:translateX(40px)}}
+        .toast-ic{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+        .toast.success .toast-ic{background:rgba(16,185,129,.15);color:var(--emerald-500)}
+        .toast.info .toast-ic{background:rgba(99,102,241,.15);color:var(--primary-600)}
+        .toast-content{flex:1;min-width:0}
+        .toast-content strong{display:block;color:var(--text-1);font-size:.88rem;font-weight:700}
+        .toast-content span{display:block;color:var(--text-2);font-size:.8rem;margin-top:1px}
+        .toast-close{background:none;border:none;color:var(--text-3);cursor:pointer;padding:2px;font-size:.85rem;transition:color var(--t)}
+        .toast-close:hover{color:var(--text-1)}
+
+        /* ============= RESPONSIVE ============= */
+        @media (max-width:1024px){
+            .nav-links{gap:1rem}
+        }
+        @media (max-width:768px){
+            .nav-links{position:fixed;top:var(--header-h);left:0;right:0;background:var(--surface);flex-direction:column;padding:1.5rem var(--container-px);gap:0;transform:translateY(-150%);transition:transform var(--t);box-shadow:var(--shadow-md);border-bottom:1px solid var(--border);z-index:99}
+            .nav-links.open{transform:translateY(0)}
+            .nav-links a{display:block;padding:1rem 0;width:100%;border-bottom:1px solid var(--border)}
+            .nav-links a:last-child{border-bottom:none}
+            .nav-toggle{display:flex}
+            .nav-cta{display:none}
+            .toolbar{flex-direction:column;align-items:stretch}
+            .toolbar-left{flex-direction:column;align-items:stretch}
+            .filter-select{width:100%}
+            .cta-section .btn-whatsapp-cta{margin-left:0;margin-top:.6rem}
+            .toast-container{left:1rem;right:1rem;bottom:1rem;max-width:none}
+        }
+        @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+    </style>
+</head>
+<body>
+<script src="db.js"></script>
+<script src="auth.js"></script>
+<script>LoyerProAuth.requireBailleur();</script>
+
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="index.html" class="nav-brand" aria-label="LoyerPro — Accueil">
+                <span class="brand-mark"><i class="fas fa-building"></i></span>
+                <span class="brand-text">Loyer<span class="brand-accent">Pro</span></span>
+            </a>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="biens.html">Biens</a></li>
+                <li><a href="gestion-locataires.html">Locataires</a></li>
+                <li><a href="paiements.html">Paiements</a></li>
+                <li><a href="facture-loyer.html">Quittances</a></li>
+                <li><a href="locataire.html">Espace client</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="icon-btn" id="theme-toggle" aria-label="Basculer le mode sombre" title="Thème"><i class="fas fa-moon" id="theme-icon"></i></button>
+                <a href="inscription.html" class="nav-cta"><i class="fas fa-user-plus"></i> Inscription</a>
+                <button class="nav-toggle" id="nav-toggle" aria-label="Ouvrir le menu" aria-expanded="false"><i class="fas fa-bars"></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- PAGE -->
+    <section class="page">
+        <div class="container">
+            <!-- Breadcrumb -->
+            <nav class="breadcrumb" aria-label="Fil d'Ariane">
+                <a href="index.html"><i class="fas fa-house"></i> Accueil</a>
+                <i class="fas fa-chevron-right"></i>
+                <span class="current">États des lieux</span>
+            </nav>
+
+            <!-- Page head -->
+            <header class="page-head">
+                <h1>États des <span class="accent">lieux</span></h1>
+                <p>Réalisez et comparez vos états des lieux entrée/sortie. Suivez chaque pièce, archivez vos photos et générez un PV synthétique en quelques minutes.</p>
+            </header>
+
+            <!-- Stats -->
+            <div class="summary-strip">
+                <div class="summary-chip">
+                    <div class="chip-ic indigo"><i class="fas fa-clipboard-list"></i></div>
+                    <div class="chip-meta">
+                        <div class="lbl">En cours</div>
+                        <div class="val">3</div>
+                        <div class="sub">États à finaliser</div>
+                    </div>
+                </div>
+                <div class="summary-chip">
+                    <div class="chip-ic emerald"><i class="fas fa-circle-check"></i></div>
+                    <div class="chip-meta">
+                        <div class="lbl">Terminés ce mois</div>
+                        <div class="val">7</div>
+                        <div class="sub">+2 vs mois dernier</div>
+                    </div>
+                </div>
+                <div class="summary-chip">
+                    <div class="chip-ic amber"><i class="fas fa-scale-balanced"></i></div>
+                    <div class="chip-meta">
+                        <div class="lbl">Écart moyen</div>
+                        <div class="val">2 500</div>
+                        <div class="sub">FCFA / entrée-sortie</div>
+                    </div>
+                </div>
+                <div class="summary-chip">
+                    <div class="chip-ic rose"><i class="fas fa-images"></i></div>
+                    <div class="chip-meta">
+                        <div class="lbl">Photos importées</div>
+                        <div class="val">184</div>
+                        <div class="sub">Ce trimestre</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Toolbar -->
+            <div class="toolbar" role="region" aria-label="Filtres et actions">
+                <div class="toolbar-left">
+                    <select id="filter-type" class="filter-select" aria-label="Filtrer par type">
+                        <option value="">Tous les types</option>
+                        <option value="entry">Entrée</option>
+                        <option value="exit">Sortie</option>
+                    </select>
+                    <select id="filter-status" class="filter-select" aria-label="Filtrer par statut">
+                        <option value="">Tous les statuts</option>
+                        <option value="progress">En cours</option>
+                        <option value="done">Terminé</option>
+                    </select>
+                </div>
+                <a class="btn btn-whatsapp" id="btn-new" href="javascript:void(0)" onclick="openWhatsApp('Bonjour LoyerPro, je souhaite créer un nouvel état des lieux. Pouvez-vous m\'assister ?')" aria-label="Demander un nouvel état des lieux via WhatsApp">
+                    <i class="fas fa-plus"></i> Nouvel état des lieux
+                </a>
+            </div>
+
+            <!-- States list -->
+            <div class="section-title">
+                <div class="lead">
+                    <h2><i class="fas fa-folder-open"></i> États des lieux récents</h2>
+                    <p>Cliquez sur une carte pour comparer, télécharger ou demander de l'aide.</p>
+                </div>
+            </div>
+
+            <div class="states-grid" id="states-grid" aria-live="polite">
+                <!-- State 1 -->
+                <article class="state-card">
+                    <div class="state-card-head">
+                        <span class="state-type entry"><i class="fas fa-door-open"></i> Entrée</span>
+                        <span class="state-status done">Terminé</span>
+                    </div>
+                    <div class="state-prop">Appartement T3 — Cocotiers</div>
+                    <div class="state-info">
+                        <div class="state-row"><i class="fas fa-user"></i> <strong>Marie ANOUKOUM</strong></div>
+                        <div class="state-row"><i class="fas fa-calendar-day"></i> <span>15 mars 2025</span></div>
+                        <div class="state-row"><i class="fas fa-cube"></i> <span>7 pièces inspectées</span></div>
+                    </div>
+                    <div class="state-photos">
+                        <span class="photo-thumb g0"><i class="fas fa-image"></i></span>
+                        <span class="photo-thumb g1"><i class="fas fa-couch"></i></span>
+                        <span class="photo-thumb g2"><i class="fas fa-bath"></i></span>
+                        <span class="photo-thumb g3"><i class="fas fa-kitchen-set"></i></span>
+                        <span class="photo-count">+ 12 photos</span>
+                    </div>
+                    <div class="state-actions">
+                        <button class="btn btn-outline" onclick="toast('PDF généré','Le PV d\'état des lieux a été téléchargé.','success')"><i class="fas fa-file-pdf"></i> PDF</button>
+                        <button class="btn btn-outline" onclick="toast('Comparaison','Aucun état de sortie associé pour l\'instant.','info')"><i class="fas fa-scale-balanced"></i> Comparer</button>
+                    </div>
+                </article>
+
+                <!-- State 2 -->
+                <article class="state-card">
+                    <div class="state-card-head">
+                        <span class="state-type exit"><i class="fas fa-door-closed"></i> Sortie</span>
+                        <span class="state-status progress">En cours</span>
+                    </div>
+                    <div class="state-prop">Studio meublé — Centre-ville</div>
+                    <div class="state-info">
+                        <div class="state-row"><i class="fas fa-user"></i> <strong>Kossi ADANLE</strong></div>
+                        <div class="state-row"><i class="fas fa-calendar-day"></i> <span>28 juin 2025</span></div>
+                        <div class="state-row"><i class="fas fa-cube"></i> <span>4 pièces inspectées</span></div>
+                    </div>
+                    <div class="state-photos">
+                        <span class="photo-thumb g2"><i class="fas fa-image"></i></span>
+                        <span class="photo-thumb g3"><i class="fas fa-bed"></i></span>
+                        <span class="photo-count">+ 6 photos</span>
+                    </div>
+                    <div class="state-actions">
+                        <button class="btn btn-outline" onclick="toast('Brouillon enregistré','Le PV sera disponible une fois l\'inspection terminée.','info')"><i class="fas fa-file-pdf"></i> PDF</button>
+                        <button class="btn btn-outline" onclick="toast('Comparaison','État d\'entrée du 12 janvier 2024 chargé pour comparaison.','success')"><i class="fas fa-scale-balanced"></i> Comparer</button>
+                    </div>
+                </article>
+
+                <!-- State 3 -->
+                <article class="state-card">
+                    <div class="state-card-head">
+                        <span class="state-type entry"><i class="fas fa-door-open"></i> Entrée</span>
+                        <span class="state-status done">Terminé</span>
+                    </div>
+                    <div class="state-prop">Maison F4 — Quartier Bè</div>
+                    <div class="state-info">
+                        <div class="state-row"><i class="fas fa-user"></i> <strong>Afi DZIDZIENYO</strong></div>
+                        <div class="state-row"><i class="fas fa-calendar-day"></i> <span>05 avril 2025</span></div>
+                        <div class="state-row"><i class="fas fa-cube"></i> <span>9 pièces inspectées</span></div>
+                    </div>
+                    <div class="state-photos">
+                        <span class="photo-thumb g1"><i class="fas fa-image"></i></span>
+                        <span class="photo-thumb g0"><i class="fas fa-house"></i></span>
+                        <span class="photo-thumb g2"><i class="fas fa-bath"></i></span>
+                        <span class="photo-count">+ 18 photos</span>
+                    </div>
+                    <div class="state-actions">
+                        <button class="btn btn-outline" onclick="toast('PDF généré','Le PV d\'état des lieux a été téléchargé.','success')"><i class="fas fa-file-pdf"></i> PDF</button>
+                        <button class="btn btn-outline" onclick="toast('Comparaison','Aucun état de sortie associé pour l\'instant.','info')"><i class="fas fa-scale-balanced"></i> Comparer</button>
+                    </div>
+                </article>
+
+                <!-- State 4 -->
+                <article class="state-card">
+                    <div class="state-card-head">
+                        <span class="state-type exit"><i class="fas fa-door-closed"></i> Sortie</span>
+                        <span class="state-status done">Terminé</span>
+                    </div>
+                    <div class="state-prop">Appartement T2 — Lomé II</div>
+                    <div class="state-info">
+                        <div class="state-row"><i class="fas fa-user"></i> <strong>Komlan BESSAN</strong></div>
+                        <div class="state-row"><i class="fas fa-calendar-day"></i> <span>10 mai 2025</span></div>
+                        <div class="state-row"><i class="fas fa-cube"></i> <span>5 pièces inspectées</span></div>
+                    </div>
+                    <div class="state-photos">
+                        <span class="photo-thumb g3"><i class="fas fa-image"></i></span>
+                        <span class="photo-thumb g1"><i class="fas fa-couch"></i></span>
+                        <span class="photo-count">+ 9 photos</span>
+                    </div>
+                    <div class="state-actions">
+                        <button class="btn btn-outline" onclick="toast('PDF généré','Le PV de sortie a été téléchargé.','success')"><i class="fas fa-file-pdf"></i> PDF</button>
+                        <button class="btn btn-outline" onclick="toast('Comparaison','Écart estimé : 5 000 FCFA (petites dégradations).','success')"><i class="fas fa-scale-balanced"></i> Comparer</button>
+                    </div>
+                </article>
+            </div>
+
+            <!-- Comment ça marche -->
+            <div class="section-title">
+                <div class="lead">
+                    <h2><i class="fas fa-list-check"></i> Comment ça marche</h2>
+                    <p>Un processus simple en 3 étapes, du repérage à la synthèse.</p>
+                </div>
+            </div>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <span class="step-num">01</span>
+                    <div class="step-ic"><i class="fas fa-clipboard-check"></i></div>
+                    <h3>Préparation</h3>
+                    <p>Choisissez le bien et le locataire concernés, puis sélectionnez un modèle d'inspection adapté (appartement, maison, studio). Vous pouvez personnaliser les pièces et les rubriques à inspecter avant le rendez-vous.</p>
+                </div>
+                <div class="step-card">
+                    <span class="step-num">02</span>
+                    <div class="step-ic"><i class="fas fa-magnifying-glass"></i></div>
+                    <h3>Inspection</h3>
+                    <p>Au cours de la visite, renseignez l'état de chaque pièce et joignez vos photos. Les compteurs, clés et équipements sont tracés pièce par pièce pour ne rien oublier lors de l'entrée comme de la sortie.</p>
+                </div>
+                <div class="step-card">
+                    <span class="step-num">03</span>
+                    <div class="step-ic"><i class="fas fa-file-circle-check"></i></div>
+                    <h3>Synthèse</h3>
+                    <p>Générez automatiquement un PV signable, comparez l'entrée et la sortie, et calculez les éventuels retenues sur le dépôt de garantie. Le tout archivé et exportable en PDF à tout moment.</p>
+                </div>
+            </div>
+
+            <!-- Modèles types -->
+            <div class="section-title">
+                <div class="lead">
+                    <h2><i class="fas fa-layer-group"></i> Modèles types</h2>
+                    <p>Des grilles d'inspection prêtes à l'emploi pour chaque type de logement.</p>
+                </div>
+            </div>
+            <div class="templates-grid">
+                <div class="tpl-card">
+                    <div class="tpl-head">
+                        <div class="tpl-ic g0"><i class="fas fa-building"></i></div>
+                        <div>
+                            <h3>Appartement</h3>
+                            <div class="tpl-sub">T1 à T4 · 8 rubriques</div>
+                        </div>
+                    </div>
+                    <p>Modèle complet couvrant pièces de vie, cuisine, salle d'eau, balcon et parties communes privatives. Idéal pour la location classique en immeuble.</p>
+                    <div class="tpl-tags">
+                        <span class="tpl-tag">Pièces</span>
+                        <span class="tpl-tag">Équipements</span>
+                        <span class="tpl-tag">Compteurs</span>
+                    </div>
+                    <a class="btn btn-outline" href="javascript:void(0)" onclick="openWhatsApp('Bonjour LoyerPro, je souhaite utiliser le modèle \"Appartement\" pour un état des lieux.')"><i class="fas fa-download"></i> Demander ce modèle</a>
+                </div>
+                <div class="tpl-card">
+                    <div class="tpl-head">
+                        <div class="tpl-ic g1"><i class="fas fa-house-chimney"></i></div>
+                        <div>
+                            <h3>Maison</h3>
+                            <div class="tpl-sub">F4 à F6 · 12 rubriques</div>
+                        </div>
+                    </div>
+                    <p>Grille étendue incluant jardin, garage, dépendances et clôtures. Conçue pour les maisons individuelles avec espaces extérieurs et équipements spécifiques.</p>
+                    <div class="tpl-tags">
+                        <span class="tpl-tag">Extérieur</span>
+                        <span class="tpl-tag">Garage</span>
+                        <span class="tpl-tag">Jardin</span>
+                    </div>
+                    <a class="btn btn-outline" href="javascript:void(0)" onclick="openWhatsApp('Bonjour LoyerPro, je souhaite utiliser le modèle \"Maison\" pour un état des lieux.')"><i class="fas fa-download"></i> Demander ce modèle</a>
+                </div>
+                <div class="tpl-card">
+                    <div class="tpl-head">
+                        <div class="tpl-ic g2"><i class="fas fa-bed"></i></div>
+                        <div>
+                            <h3>Studio</h3>
+                            <div class="tpl-sub">Meublé · 6 rubriques</div>
+                        </div>
+                    </div>
+                    <p>Modèle léger et rapide pour studios meublés. Inventaire du mobilier, état des équipements fournis et relevé des compteurs en une seule passe.</p>
+                    <div class="tpl-tags">
+                        <span class="tpl-tag">Mobilier</span>
+                        <span class="tpl-tag">Équipements</span>
+                        <span class="tpl-tag">Rapide</span>
+                    </div>
+                    <a class="btn btn-outline" href="javascript:void(0)" onclick="openWhatsApp('Bonjour LoyerPro, je souhaite utiliser le modèle \"Studio\" pour un état des lieux.')"><i class="fas fa-download"></i> Demander ce modèle</a>
+                </div>
+            </div>
+
+            <!-- CTA -->
+            <section class="cta-section" aria-labelledby="cta-title">
+                <div class="cta-inner">
+                    <h2 id="cta-title">Besoin d'aide pour un état des lieux ?</h2>
+                    <p>Notre équipe vous accompagne pas à pas : préparation de la grille d'inspection, conseils sur la comparaison entrée/sortie et calcul des retenues sur dépôt de garantie. Écrivez-nous sur WhatsApp, nous répondons rapidement pendant les heures ouvrables.</p>
+                    <a class="btn btn-whatsapp-cta" href="javascript:void(0)" onclick="openWhatsApp('Bonjour LoyerPro, j\'ai besoin d\'aide pour réaliser un état des lieux.')">
+                        <i class="fab fa-whatsapp"></i> Demander assistance
+                    </a>
+                    <a class="btn" href="support.html"><i class="fas fa-circle-question"></i> Voir le centre d'aide</a>
+                </div>
+            </section>
+        </div>
+    </section>
+
+    <!-- TOAST CONTAINER -->
+    <div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+    <script>
+    // Theme
+    const themeToggle=document.getElementById('theme-toggle'),themeIcon=document.getElementById('theme-icon'),prefersDark=window.matchMedia('(prefers-color-scheme: dark)'),savedTheme=localStorage.getItem('theme');
+    if(savedTheme==='dark'||(!savedTheme&&prefersDark.matches)){document.documentElement.setAttribute('data-theme','dark');themeIcon.classList.replace('fa-moon','fa-sun')}
+    themeToggle.addEventListener('click',()=>{const d=document.documentElement.getAttribute('data-theme')==='dark';if(d){document.documentElement.removeAttribute('data-theme');themeIcon.classList.replace('fa-sun','fa-moon');localStorage.setItem('theme','light')}else{document.documentElement.setAttribute('data-theme','dark');themeIcon.classList.replace('fa-moon','fa-sun');localStorage.setItem('theme','dark')}});
+    // Navbar
+    const navbar=document.getElementById('navbar'),navToggle=document.getElementById('nav-toggle'),navLinks=document.getElementById('nav-links');
+    window.addEventListener('scroll',()=>navbar.classList.toggle('scrolled',window.scrollY>20),{passive:true});
+    const toggleMenu=()=>{const o=navLinks.classList.toggle('open');navToggle.setAttribute('aria-expanded',o);navToggle.innerHTML=o?'<i class="fas fa-times"></i>':'<i class="fas fa-bars"></i>'};
+    navToggle.addEventListener('click',toggleMenu);
+    navLinks.querySelectorAll('a').forEach(l=>l.addEventListener('click',()=>navLinks.classList.contains('open')&&toggleMenu()));
+
+    // WhatsApp helper
+    function openWhatsApp(msg){
+        const base="Bonjour LoyerPro, je souhaite avoir des informations sur vos services de gestion locative.";
+        const text=encodeURIComponent(msg||base);
+        window.open('https://wa.me/22892871605?text='+text,'_blank','noopener');
+    }
+
+    // Toast
+    const TOAST_ICONS={success:'fa-circle-check',error:'fa-circle-exclamation',info:'fa-circle-info',warning:'fa-triangle-exclamation'};
+    function toast(title,message,type){
+        type=type||'success';
+        const el=document.createElement('div');
+        el.className='toast '+type;
+        el.setAttribute('role','status');
+        el.innerHTML='<div class="toast-ic"><i class="fas '+(TOAST_ICONS[type]||TOAST_ICONS.info)+'"></i></div><div class="toast-content"><strong></strong>'+(message?'<span></span>':'')+'</div><button class="toast-close" aria-label="Fermer"><i class="fas fa-times"></i></button>';
+        el.querySelector('strong').textContent=title;
+        if(message)el.querySelector('span').textContent=message;
+        document.getElementById('toast-container').appendChild(el);
+        const remove=()=>{el.classList.add('hide');setTimeout(()=>el.remove(),300)};
+        el.querySelector('.toast-close').addEventListener('click',remove);
+        setTimeout(remove,3800);
+    }
+
+    // Filters (visual feedback)
+    const filterType=document.getElementById('filter-type'),filterStatus=document.getElementById('filter-status');
+    function applyFilters(){
+        const t=filterType.value,s=filterStatus.value;
+        const cards=document.querySelectorAll('#states-grid .state-card');
+        let visible=0;
+        cards.forEach(c=>{
+            const ct=c.querySelector('.state-type').classList.contains('entry')?'entry':'exit';
+            const cs=c.querySelector('.state-status').classList.contains('done')?'done':'progress';
+            const okT=!t||ct===t,okS=!s||cs===s;
+            c.style.display=(okT&&okS)?'':'none';
+            if(okT&&okS)visible++;
+        });
+        if(visible===0){toast('Aucun résultat','Aucun état des lieux ne correspond à ces filtres.','info')}
+    }
+    filterType.addEventListener('change',applyFilters);
+    filterStatus.addEventListener('change',applyFilters);
+    </script>
+    <script src="navbar-auth.js"></script>
+<script src="auto-save.js"></script>
+<script src="whatsapp-float.js"></script>
+</body>
+</html>

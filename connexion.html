@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Connexion à LoyerPro — accédez à votre espace bailleur ou locataire avec votre identifiant et mot de passe.">
+    <meta name="theme-color" content="#4f46e5">
+    <title>Connexion — LoyerPro</title>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary-50:#eef2ff;--primary-100:#e0e7ff;--primary-500:#6366f1;--primary-600:#4f46e5;--primary-700:#4338ca;
+            --teal-500:#14b8a6;--amber-500:#f59e0b;--rose-500:#f43f5e;--emerald-500:#10b981;
+            --text-1:#0f172a;--text-2:#475569;--text-3:#94a3b8;
+            --bg:#f8fafc;--surface:#fff;--surface-2:#f1f5f9;--surface-3:#e2e8f0;
+            --border:#e2e8f0;--border-strong:#cbd5e1;
+            --r-sm:8px;--r-md:12px;--r-lg:18px;--r-xl:28px;--r-full:999px;
+            --shadow-sm:0 2px 8px rgba(15,23,42,.06);--shadow-md:0 8px 24px rgba(15,23,42,.08);--shadow-lg:0 20px 48px rgba(15,23,42,.12);
+            --shadow-glow:0 8px 32px rgba(99,102,241,.25);
+            --container-max:1240px;--container-px:clamp(1rem,5vw,2rem);--header-h:72px;
+            --t:.3s cubic-bezier(.4,0,.2,1);
+            --gradient-primary:linear-gradient(135deg,#6366f1 0%,#8b5cf6 50%,#ec4899 100%);
+        }
+        [data-theme="dark"] {
+            --text-1:#f1f5f9;--text-2:#cbd5e1;--text-3:#64748b;
+            --bg:#0a0e1a;--surface:#131826;--surface-2:#1a2030;--surface-3:#242b3d;
+            --border:#242b3d;--border-strong:#334155;
+            --shadow-sm:0 2px 8px rgba(0,0,0,.4);--shadow-md:0 8px 24px rgba(0,0,0,.5);--shadow-lg:0 20px 48px rgba(0,0,0,.6);
+        }
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+        body{background:var(--bg);color:var(--text-1);font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.6;overflow-x:hidden;transition:background-color var(--t),color var(--t);-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
+        a{color:inherit;text-decoration:none}
+        ul{list-style:none}
+        button{font-family:inherit}
+        :focus-visible{outline:3px solid var(--primary-500);outline-offset:3px;border-radius:4px}
+        .container{width:100%;max-width:var(--container-max);margin:0 auto;padding:0 var(--container-px)}
+        .navbar{position:fixed;top:0;left:0;right:0;height:var(--header-h);background:rgba(255,255,255,.8);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);z-index:100;transition:all var(--t);border-bottom:1px solid transparent}
+        [data-theme="dark"] .navbar{background:rgba(19,24,38,.85)}
+        .navbar.scrolled{border-bottom-color:var(--border);box-shadow:var(--shadow-sm)}
+        .navbar .container{height:100%;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+        .nav-brand{display:flex;align-items:center;gap:10px;font-size:1.35rem;font-weight:800;letter-spacing:-.02em}
+        .brand-mark{width:38px;height:38px;border-radius:var(--r-sm);background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.1rem;box-shadow:var(--shadow-glow)}
+        .brand-text{color:var(--text-1)}
+        .brand-accent{background:var(--gradient-primary);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+        .nav-links{display:flex;gap:clamp(1rem,2vw,2rem);align-items:center}
+        .nav-links a{color:var(--text-2);font-weight:500;font-size:.95rem;transition:color var(--t)}
+        .nav-links a:hover{color:var(--text-1)}
+        .nav-links a.active{color:var(--primary-600);font-weight:600}
+        .nav-actions{display:flex;align-items:center;gap:.5rem}
+        .icon-btn{background:var(--surface-2);border:none;color:var(--text-1);width:40px;height:40px;border-radius:var(--r-sm);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;transition:all var(--t)}
+        .icon-btn:hover{background:var(--primary-50);color:var(--primary-600)}
+        [data-theme="dark"] .icon-btn:hover{background:rgba(99,102,241,.15)}
+        .nav-cta{background:var(--primary-600);color:#fff;padding:10px 20px;border-radius:var(--r-full);font-weight:600;font-size:.9rem;transition:all var(--t);display:inline-flex;align-items:center;gap:6px}
+        .nav-cta:hover{background:var(--primary-700);transform:translateY(-1px);box-shadow:var(--shadow-glow)}
+        .nav-toggle{display:none;background:var(--surface-2);border:none;color:var(--text-1);font-size:1.25rem;cursor:pointer;width:44px;height:44px;border-radius:var(--r-sm);align-items:center;justify-content:center}
+
+        main{flex:1;display:flex;align-items:center;justify-content:center;padding:calc(var(--header-h) + 40px) var(--container-px) 40px;position:relative;overflow:hidden}
+        main::before{content:'';position:absolute;inset:0;background:radial-gradient(at 0% 0%,rgba(99,102,241,.18) 0,transparent 50%),radial-gradient(at 100% 100%,rgba(20,184,166,.15) 0,transparent 50%);pointer-events:none}
+        [data-theme="dark"] main::before{opacity:.4}
+
+        .login-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:clamp(1.5rem,4vw,2.5rem);box-shadow:var(--shadow-lg);max-width:440px;width:100%;position:relative;z-index:1}
+        .login-header{text-align:center;margin-bottom:1.75rem}
+        .login-icon{width:64px;height:64px;margin:0 auto 1rem;border-radius:50%;background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.6rem;box-shadow:var(--shadow-glow)}
+        .login-title{font-size:1.5rem;font-weight:800;color:var(--text-1);letter-spacing:-.02em;margin-bottom:.25rem}
+        .login-subtitle{color:var(--text-2);font-size:.92rem}
+
+        .role-tabs{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:1.5rem;background:var(--surface-2);border-radius:var(--r-md);padding:4px}
+        .role-tab{padding:.65rem;background:transparent;border:none;border-radius:var(--r-sm);color:var(--text-2);font-weight:600;font-size:.88rem;cursor:pointer;transition:all var(--t);display:flex;align-items:center;justify-content:center;gap:6px}
+        .role-tab.active{background:var(--primary-600);color:#fff;box-shadow:var(--shadow-sm)}
+        .role-tab:not(.active):hover{color:var(--text-1)}
+
+        .form-group{margin-bottom:1rem}
+        .form-group label{display:block;font-size:.85rem;font-weight:600;color:var(--text-1);margin-bottom:.4rem}
+        .form-control{width:100%;padding:.75rem .9rem;background:var(--surface-2);border:1.5px solid var(--border);border-radius:var(--r-md);color:var(--text-1);font-family:inherit;font-size:.95rem;transition:all var(--t)}
+        .form-control:focus{outline:none;border-color:var(--primary-500);background:var(--surface);box-shadow:0 0 0 3px rgba(99,102,241,.15)}
+        .input-group{position:relative}
+        .input-group .input-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-3);font-size:.9rem;pointer-events:none}
+        .input-group .input-icon-left .form-control{padding-left:38px}
+        .input-group .input-toggle{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--text-3);cursor:pointer;background:none;border:none;font-size:.9rem}
+
+        .form-options{display:flex;justify-content:space-between;align-items:center;margin:1rem 0 1.5rem;flex-wrap:wrap;gap:.5rem}
+        .checkbox-group{display:flex;align-items:center;gap:8px}
+        .checkbox-group input{width:18px;height:18px;accent-color:var(--primary-600);cursor:pointer}
+        .checkbox-group label{font-size:.82rem;color:var(--text-2);cursor:pointer;margin:0}
+        .forgot-link{font-size:.82rem;color:var(--primary-600);font-weight:600}
+
+        .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;padding:.85rem 1.5rem;border-radius:var(--r-full);font-weight:600;font-size:.95rem;text-decoration:none;transition:all var(--t);min-height:48px;border:2px solid transparent;cursor:pointer;width:100%}
+        .btn-primary{background:var(--primary-600);color:#fff}
+        .btn-primary:hover{background:var(--primary-700);transform:translateY(-1px);box-shadow:var(--shadow-glow)}
+        .btn-primary:disabled{opacity:.6;cursor:not-allowed;transform:none}
+        .btn-outline{background:transparent;color:var(--text-1);border-color:var(--border-strong)}
+        .btn-outline:hover{border-color:var(--primary-500);color:var(--primary-600);background:var(--primary-50)}
+
+        .alert{padding:.75rem 1rem;border-radius:var(--r-md);font-size:.85rem;margin-bottom:1rem;display:none;align-items:flex-start;gap:8px}
+        .alert.show{display:flex}
+        .alert-error{background:rgba(244,63,94,.08);border-left:4px solid var(--rose-500);color:var(--text-1)}
+        .alert-error i{color:var(--rose-500);margin-top:2px}
+        .alert-success{background:rgba(16,185,129,.08);border-left:4px solid var(--emerald-500);color:var(--text-1)}
+        .alert-success i{color:var(--emerald-500);margin-top:2px}
+        .alert-info{background:rgba(99,102,241,.08);border-left:4px solid var(--primary-500);color:var(--text-1)}
+        .alert-info i{color:var(--primary-500);margin-top:2px}
+
+        .info-banner{background:rgba(99,102,241,.06);border-left:4px solid var(--primary-500);border-radius:var(--r-md);padding:.75rem 1rem;margin-bottom:1.5rem;font-size:.82rem;color:var(--text-2);line-height:1.5}
+        .info-banner strong{color:var(--text-1)}
+
+        .login-footer{text-align:center;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border)}
+        .login-footer p{font-size:.85rem;color:var(--text-2);margin-bottom:.5rem}
+        .login-footer a{color:var(--primary-600);font-weight:600}
+
+        .demo-credentials{margin-top:1rem;padding:.85rem;background:var(--surface-2);border-radius:var(--r-md);font-size:.78rem;color:var(--text-3)}
+        .demo-credentials strong{color:var(--text-1);font-size:.82rem;display:block;margin-bottom:4px}
+        .demo-credentials code{font-family:'Courier New',Consolas,monospace;color:var(--primary-600);font-weight:700;cursor:pointer}
+        .demo-credentials code:hover{text-decoration:underline}
+
+        footer{background:#0a0e1a;color:#cbd5e1;padding:1.5rem 0;text-align:center}
+        .footer-bottom{color:#64748b;font-size:.85rem}
+
+        @media (max-width:768px){
+            .nav-links{position:fixed;top:var(--header-h);left:0;right:0;background:var(--surface);flex-direction:column;padding:1.5rem var(--container-px);gap:0;transform:translateY(-150%);transition:transform var(--t);box-shadow:var(--shadow-md);border-bottom:1px solid var(--border);z-index:99}
+            .nav-links.open{transform:translateY(0)}
+            .nav-links a{display:block;padding:1rem 0;width:100%;border-bottom:1px solid var(--border)}
+            .nav-links a:last-child{border-bottom:none}
+            .nav-toggle{display:flex}
+            .nav-cta{display:none}
+        }
+        @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+    </style>
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="index.html" class="nav-brand">
+                <span class="brand-mark"><i class="fas fa-building"></i></span>
+                <span class="brand-text">Loyer<span class="brand-accent">Pro</span></span>
+            </a>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="abonnement.html">Abonnement</a></li>
+                <li><a href="support.html">Support</a></li>
+                <li><a href="connexion.html" class="active">Connexion</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="icon-btn" id="theme-toggle" aria-label="Basculer le mode sombre"><i class="fas fa-moon" id="theme-icon"></i></button>
+                <a href="inscription.html" class="nav-cta"><i class="fas fa-user-plus"></i> Inscription</a>
+                <button class="nav-toggle" id="nav-toggle" aria-label="Ouvrir le menu" aria-expanded="false"><i class="fas fa-bars"></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-icon"><i class="fas fa-right-to-bracket"></i></div>
+                <h1 class="login-title">Connexion</h1>
+                <p class="login-subtitle">Accédez à votre espace LoyerPro</p>
+            </div>
+
+            <!-- Onglets bailleur / locataire -->
+            <div class="role-tabs" role="tablist">
+                <button class="role-tab active" id="tab-bailleur" onclick="selectRole('bailleur')" role="tab" aria-selected="true">
+                    <i class="fas fa-building"></i> Bailleur
+                </button>
+                <button class="role-tab" id="tab-locataire" onclick="selectRole('locataire')" role="tab" aria-selected="false">
+                    <i class="fas fa-user"></i> Locataire
+                </button>
+            </div>
+
+            <!-- Alerte -->
+            <div class="alert" id="alert-box" role="alert"></div>
+
+            <!-- Info : session 30 jours -->
+            <div class="info-banner">
+                <i class="fas fa-shield-halved" style="color:var(--primary-600)"></i>
+                <strong>Session de 30 jours.</strong> Votre identifiant et mot de passe sont mémorisés pendant 30 jours pour un accès automatique à votre espace.
+            </div>
+
+            <form id="login-form" onsubmit="return doLogin(event)">
+                <input type="hidden" id="selected-role" value="bailleur">
+
+                <div class="form-group">
+                    <label for="login-identifier">Identifiant <span style="color:var(--rose-500)">*</span></label>
+                    <div class="input-group input-icon-left">
+                        <i class="fas fa-user input-icon"></i>
+                        <input type="text" id="login-identifier" class="form-control" placeholder="Ex : LP-2026-XXXXXX" required autocomplete="username">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="login-password">Mot de passe <span style="color:var(--rose-500)">*</span></label>
+                    <div class="input-group input-icon-left">
+                        <i class="fas fa-lock input-icon"></i>
+                        <input type="password" id="login-password" class="form-control" placeholder="Votre mot de passe" required autocomplete="current-password">
+                        <button type="button" class="input-toggle" id="toggle-pwd" aria-label="Afficher/masquer le mot de passe"><i class="fas fa-eye"></i></button>
+                    </div>
+                </div>
+
+                <div class="form-options">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="remember" checked>
+                        <label for="remember">Rester connecté 30 jours</label>
+                    </div>
+                    <a href="https://wa.me/22892871605?text=Bonjour%20LoyerPro%2C%20j%27ai%20oubli%C3%A9%20mes%20identifiants%20de%20connexion." target="_blank" rel="noopener" class="forgot-link">Identifiants oubliés ?</a>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="btn-login">
+                    <i class="fas fa-right-to-bracket"></i> Se connecter
+                </button>
+            </form>
+
+            <!-- Identifiants de démo -->
+            <div class="demo-credentials">
+                <strong><i class="fas fa-circle-info"></i> Comptes de démonstration :</strong>
+                Bailleur : <code onclick="fillDemo('LP-2025-DEMO01','Demo!2025','bailleur')">LP-2025-DEMO01 / Demo!2025</code><br>
+                Locataire : <code onclick="fillDemo('LOC-2025-MA0001','Loc!2025A','locataire')">LOC-2025-MA0001 / Loc!2025A</code>
+                <p style="margin-top:4px;font-size:.72rem">(cliquez pour pré-remplir)</p>
+            </div>
+
+            <div class="login-footer">
+                <p>Pas encore de compte ? <a href="inscription.html">Inscrivez-vous</a></p>
+                <p style="font-size:.78rem;color:var(--text-3)">Locataire ? Vos identifiants vous sont communiqués par votre bailleur.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">&copy; 2025 LoyerPro. Tous droits réservés. · <a href="mentions-legales.html" style="color:#94a3b8">Mentions légales</a> · <a href="support.html" style="color:#94a3b8">Support</a></div>
+        </div>
+    </footer>
+
+    <script src="db.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        // === NAVBAR ===
+        const navbar=document.getElementById('navbar'),navToggle=document.getElementById('nav-toggle'),navLinks=document.getElementById('nav-links');
+        window.addEventListener('scroll',()=>navbar.classList.toggle('scrolled',window.scrollY>20),{passive:true});
+        const toggleMenu=()=>{const o=navLinks.classList.toggle('open');navToggle.setAttribute('aria-expanded',o);navToggle.innerHTML=o?'<i class="fas fa-times"></i>':'<i class="fas fa-bars"></i>'};
+        navToggle.addEventListener('click',toggleMenu);
+        navLinks.querySelectorAll('a').forEach(l=>l.addEventListener('click',()=>navLinks.classList.contains('open')&&toggleMenu()));
+
+        // === THEME ===
+        const themeToggle=document.getElementById('theme-toggle'),themeIcon=document.getElementById('theme-icon'),prefersDark=window.matchMedia('(prefers-color-scheme: dark)'),savedTheme=localStorage.getItem('theme');
+        if(savedTheme==='dark'||(!savedTheme&&prefersDark.matches)){document.documentElement.setAttribute('data-theme','dark');themeIcon.classList.replace('fa-moon','fa-sun')}
+        themeToggle.addEventListener('click',()=>{const d=document.documentElement.getAttribute('data-theme')==='dark';if(d){document.documentElement.removeAttribute('data-theme');themeIcon.classList.replace('fa-sun','fa-moon');localStorage.setItem('theme','light')}else{document.documentElement.setAttribute('data-theme','dark');themeIcon.classList.replace('fa-moon','fa-sun');localStorage.setItem('theme','dark')}});
+
+        // === PASSWORD TOGGLE ===
+        document.getElementById('toggle-pwd').addEventListener('click',function(){
+            const pwd=document.getElementById('login-password');
+            const isPwd=pwd.type==='password';
+            pwd.type=isPwd?'text':'password';
+            this.innerHTML=isPwd?'<i class="fas fa-eye-slash"></i>':'<i class="fas fa-eye"></i>';
+        });
+
+        // === Si déjà connecté, rediriger ===
+        (function(){
+            if (LoyerProAuth.isAuth()) {
+                const session = LoyerProAuth.currentSession();
+                const target = session.type === 'bailleur' ? 'dashboard.html' : 'locataire.html';
+                const redirect = LoyerProAuth.getRedirectUrl(target);
+                // Si l'utilisateur est déjà connecté, on le redirige
+                const urlParams = new URLSearchParams(window.location.search);
+                if (!urlParams.get('redirect')) {
+                    window.location.href = target;
+                }
+            }
+        })();
+
+        // === Sélection du rôle ===
+        function selectRole(role) {
+            document.querySelectorAll('.role-tab').forEach(t => {
+                t.classList.remove('active');
+                t.setAttribute('aria-selected', 'false');
+            });
+            document.getElementById('tab-' + role).classList.add('active');
+            document.getElementById('tab-' + role).setAttribute('aria-selected', 'true');
+            document.getElementById('selected-role').value = role;
+
+            // Placeholder dynamique
+            const idField = document.getElementById('login-identifier');
+            if (role === 'bailleur') {
+                idField.placeholder = 'Ex : LP-2026-XXXXXX';
+            } else {
+                idField.placeholder = 'Ex : LOC-2026-XXXXXX';
+            }
+
+            hideAlert();
+        }
+
+        // === Alertes ===
+        function showAlert(type, message) {
+            const alert = document.getElementById('alert-box');
+            alert.className = 'alert show alert-' + type;
+            const icons = { error: 'fa-circle-exclamation', success: 'fa-circle-check', info: 'fa-circle-info' };
+            alert.innerHTML = '<i class="fas ' + (icons[type] || icons.info) + '"></i><span>' + message + '</span>';
+        }
+        function hideAlert() {
+            document.getElementById('alert-box').className = 'alert';
+        }
+
+        // === Pré-remplir démo ===
+        function fillDemo(identifier, password, role) {
+            selectRole(role);
+            document.getElementById('login-identifier').value = identifier;
+            document.getElementById('login-password').value = password;
+            hideAlert();
+        }
+
+        // === Connexion ===
+        function doLogin(event) {
+            event.preventDefault();
+            hideAlert();
+
+            const identifier = document.getElementById('login-identifier').value.trim();
+            const password = document.getElementById('login-password').value;
+            const expectedRole = document.getElementById('selected-role').value;
+
+            // État de chargement
+            const btn = document.getElementById('btn-login');
+            const originalHTML = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connexion...';
+
+            setTimeout(() => {
+                const result = LoyerProAuth.login(identifier, password);
+
+                if (!result.success) {
+                    showAlert('error', result.error || 'Connexion impossible. Vérifiez vos identifiants.');
+                    btn.disabled = false;
+                    btn.innerHTML = originalHTML;
+                    return;
+                }
+
+                // Vérifier la cohérence du rôle
+                if (expectedRole === 'bailleur' && result.account.type !== 'bailleur') {
+                    LoyerProDB.clearSession();
+                    showAlert('error', "Cet identifiant correspond à un compte locataire. Sélectionnez l'onglet « Locataire ».");
+                    selectRole('locataire');
+                    btn.disabled = false;
+                    btn.innerHTML = originalHTML;
+                    return;
+                }
+                if (expectedRole === 'locataire' && result.account.type !== 'locataire') {
+                    LoyerProDB.clearSession();
+                    showAlert('error', "Cet identifiant correspond à un compte bailleur. Sélectionnez l'onglet « Bailleur ».");
+                    selectRole('bailleur');
+                    btn.disabled = false;
+                    btn.innerHTML = originalHTML;
+                    return;
+                }
+
+                // Succès
+                showAlert('success', 'Connexion réussie ! Redirection en cours...');
+
+                // Déterminer la page de redirection
+                const redirect = LoyerProAuth.getRedirectUrl(result.account.type === 'bailleur' ? 'dashboard.html' : 'locataire.html');
+
+                setTimeout(() => {
+                    window.location.href = redirect;
+                }, 800);
+            }, 300);
+
+            return false;
+        }
+    </script>
+    <script src="navbar-auth.js"></script>
+<script src="auto-save.js"></script>
+<script src="whatsapp-float.js"></script>
+</body>
+</html>

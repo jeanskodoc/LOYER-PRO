@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Conformité RGPD de LoyerPro — engagement, registre des traitements, mesures techniques et organisationnelles, droits et notification de violation.">
+    <meta name="theme-color" content="#4f46e5">
+    <title>Conformité RGPD — LoyerPro</title>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* === DESIGN SYSTEM === */
+        :root {
+            --primary-50:#eef2ff;--primary-100:#e0e7ff;--primary-500:#6366f1;--primary-600:#4f46e5;--primary-700:#4338ca;
+            --teal-500:#14b8a6;--amber-400:#fbbf24;--amber-500:#f59e0b;--amber-600:#d97706;
+            --rose-500:#f43f5e;--emerald-500:#10b981;
+            --text-1:#0f172a;--text-2:#475569;--text-3:#94a3b8;
+            --bg:#f8fafc;--surface:#fff;--surface-2:#f1f5f9;--surface-3:#e2e8f0;
+            --border:#e2e8f0;--border-strong:#cbd5e1;
+            --r-sm:8px;--r-md:12px;--r-lg:18px;--r-xl:28px;--r-full:999px;
+            --shadow-xs:0 1px 2px rgba(15,23,42,.05);--shadow-sm:0 2px 8px rgba(15,23,42,.06);
+            --shadow-md:0 8px 24px rgba(15,23,42,.08);--shadow-lg:0 20px 48px rgba(15,23,42,.12);
+            --shadow-glow:0 8px 32px rgba(99,102,241,.25);
+            --container-max:1240px;--container-px:clamp(1rem,5vw,2rem);--header-h:72px;
+            --t:.3s cubic-bezier(.4,0,.2,1);
+            --gradient-primary:linear-gradient(135deg,#6366f1 0%,#8b5cf6 50%,#ec4899 100%);
+        }
+        [data-theme="dark"]{
+            --text-1:#f1f5f9;--text-2:#cbd5e1;--text-3:#64748b;
+            --bg:#0a0e1a;--surface:#131826;--surface-2:#1a2030;--surface-3:#242b3d;
+            --border:#242b3d;--border-strong:#334155;
+            --shadow-sm:0 2px 8px rgba(0,0,0,.4);--shadow-md:0 8px 24px rgba(0,0,0,.5);--shadow-lg:0 20px 48px rgba(0,0,0,.6);
+        }
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+        body{background:var(--bg);color:var(--text-1);font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.6;overflow-x:hidden;transition:background-color var(--t),color var(--t);-webkit-font-smoothing:antialiased}
+        a{color:inherit;text-decoration:none}
+        ul{list-style:none}
+        button{font-family:inherit}
+        :focus-visible{outline:3px solid var(--primary-500);outline-offset:3px;border-radius:4px}
+        .container{width:100%;max-width:var(--container-max);margin:0 auto;padding:0 var(--container-px)}
+
+        /* === NAVBAR === */
+        .navbar{position:fixed;top:0;left:0;right:0;height:var(--header-h);background:rgba(255,255,255,.8);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);z-index:100;transition:all var(--t);border-bottom:1px solid transparent}
+        [data-theme="dark"] .navbar{background:rgba(19,24,38,.85)}
+        .navbar.scrolled{border-bottom-color:var(--border);box-shadow:var(--shadow-sm)}
+        .navbar .container{height:100%;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+        .nav-brand{display:flex;align-items:center;gap:10px;font-size:1.35rem;font-weight:800;letter-spacing:-.02em}
+        .brand-mark{width:38px;height:38px;border-radius:var(--r-sm);background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.1rem;box-shadow:var(--shadow-glow)}
+        .brand-text{color:var(--text-1)}
+        .brand-accent{background:var(--gradient-primary);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+        .nav-links{display:flex;gap:clamp(1rem,2vw,2rem);align-items:center}
+        .nav-links a{color:var(--text-2);font-weight:500;font-size:.95rem;transition:color var(--t);position:relative}
+        .nav-links a::after{content:'';position:absolute;bottom:-6px;left:0;width:0;height:2px;background:var(--primary-500);transition:width var(--t);border-radius:2px}
+        .nav-links a:hover{color:var(--text-1)}
+        .nav-links a:hover::after{width:100%}
+        .nav-links a.active{color:var(--primary-600);font-weight:600}
+        .nav-links a.active::after{width:100%}
+        .nav-actions{display:flex;align-items:center;gap:.5rem}
+        .icon-btn{background:var(--surface-2);border:none;color:var(--text-1);width:40px;height:40px;border-radius:var(--r-sm);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;transition:all var(--t)}
+        .icon-btn:hover{background:var(--primary-50);color:var(--primary-600)}
+        [data-theme="dark"] .icon-btn:hover{background:rgba(99,102,241,.15)}
+        .nav-cta{background:var(--primary-600);color:#fff;padding:10px 20px;border-radius:var(--r-full);font-weight:600;font-size:.9rem;transition:all var(--t);display:inline-flex;align-items:center;gap:6px}
+        .nav-cta:hover{background:var(--primary-700);transform:translateY(-1px);box-shadow:var(--shadow-glow)}
+        .nav-toggle{display:none;background:var(--surface-2);border:none;color:var(--text-1);font-size:1.25rem;cursor:pointer;width:44px;height:44px;border-radius:var(--r-sm);align-items:center;justify-content:center}
+
+        /* === BREADCRUMB === */
+        .breadcrumb{padding-top:calc(var(--header-h) + 1.5rem);padding-bottom:.5rem;font-size:.85rem;color:var(--text-3)}
+        .breadcrumb a{color:var(--text-2);transition:color var(--t)}
+        .breadcrumb a:hover{color:var(--primary-600)}
+        .breadcrumb .sep{margin:0 .5rem;color:var(--text-3)}
+        .breadcrumb .current{color:var(--text-1);font-weight:600}
+
+        /* === ARTICLE LAYOUT === */
+        .legal{padding:1rem 0 4rem}
+        .legal-layout{display:grid;grid-template-columns:240px 1fr;gap:3rem;align-items:start;max-width:1080px;margin:0 auto}
+        .toc{position:sticky;top:calc(var(--header-h) + 1.5rem);background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.25rem;box-shadow:var(--shadow-sm);max-height:calc(100vh - var(--header-h) - 3rem);overflow-y:auto}
+        .toc h4{font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:var(--text-3);margin-bottom:.85rem;font-weight:700}
+        .toc ul{display:flex;flex-direction:column;gap:.25rem}
+        .toc a{display:flex;gap:8px;align-items:baseline;font-size:.84rem;color:var(--text-2);padding:.35rem .5rem;border-radius:var(--r-sm);transition:all var(--t);line-height:1.4}
+        .toc a:hover{background:var(--primary-50);color:var(--primary-600)}
+        [data-theme="dark"] .toc a:hover{background:rgba(99,102,241,.15)}
+        .toc a .num{font-weight:700;color:var(--primary-500);font-size:.78rem;flex-shrink:0;font-variant-numeric:tabular-nums}
+
+        .article{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:clamp(1.75rem,4vw,3rem);box-shadow:var(--shadow-sm)}
+        .article-header{margin-bottom:2.25rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
+        .article-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(20,184,166,.12);color:var(--teal-500);font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:6px 14px;border-radius:var(--r-full);margin-bottom:1rem}
+        [data-theme="dark"] .article-badge{background:rgba(20,184,166,.2)}
+        .article-header h1{font-size:clamp(1.8rem,4vw,2.5rem);font-weight:800;letter-spacing:-.025em;line-height:1.15;color:var(--text-1);margin-bottom:.6rem;text-wrap:balance}
+        .article-meta{display:flex;flex-wrap:wrap;gap:1rem;font-size:.85rem;color:var(--text-3)}
+        .article-meta span{display:inline-flex;align-items:center;gap:6px}
+        .article-meta i{color:var(--teal-500)}
+
+        .prose h2{font-size:1.35rem;font-weight:700;color:var(--text-1);margin:2.25rem 0 .75rem;scroll-margin-top:calc(var(--header-h) + 1.5rem);display:flex;align-items:baseline;gap:.6rem}
+        .prose h2 .sec-num{font-size:.85rem;font-weight:700;color:var(--teal-500);background:rgba(20,184,166,.12);padding:2px 10px;border-radius:var(--r-full);flex-shrink:0}
+        [data-theme="dark"] .prose h2 .sec-num{background:rgba(20,184,166,.2)}
+        .prose h2:first-child{margin-top:0}
+        .prose h3{font-size:1.05rem;font-weight:600;color:var(--text-1);margin:1.25rem 0 .5rem}
+        .prose p{color:var(--text-2);margin-bottom:.85rem;font-size:.97rem;line-height:1.75}
+        .prose ul.bullets{margin:.5rem 0 1rem 0;padding-left:0;display:flex;flex-direction:column;gap:.4rem}
+        .prose ul.bullets li{position:relative;padding-left:1.6rem;color:var(--text-2);font-size:.95rem;line-height:1.65}
+        .prose ul.bullets li::before{content:'';position:absolute;left:0;top:.6rem;width:6px;height:6px;border-radius:50%;background:var(--teal-500)}
+        .prose strong{color:var(--text-1);font-weight:600}
+        .prose a{color:var(--primary-600);font-weight:500;text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px}
+        .prose a:hover{color:var(--primary-700)}
+        .info-card{background:var(--surface-2);border:1px solid var(--border);border-left:4px solid var(--teal-500);border-radius:var(--r-md);padding:1rem 1.25rem;margin:1.5rem 0;font-size:.92rem;color:var(--text-2)}
+        .info-card strong{display:flex;align-items:center;gap:8px;color:var(--text-1);margin-bottom:.35rem;font-size:.92rem}
+        .info-card strong i{color:var(--teal-500)}
+        .data-table{width:100%;border-collapse:collapse;margin:1rem 0 1.5rem;font-size:.9rem;border:1px solid var(--border);border-radius:var(--r-md);overflow:hidden}
+        .data-table th,.data-table td{padding:.7rem .9rem;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
+        .data-table th{background:var(--surface-2);color:var(--text-1);font-weight:600;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em}
+        .data-table tr:last-child td{border-bottom:none}
+        .data-table td:first-child{font-weight:600;color:var(--text-1)}
+
+        .measures-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;margin:1rem 0 1.5rem}
+        .measure-card{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-md);padding:1rem 1.1rem;transition:all var(--t)}
+        .measure-card:hover{border-color:var(--teal-500);transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+        .measure-card .m-icon{width:34px;height:34px;border-radius:var(--r-sm);background:rgba(20,184,166,.12);color:var(--teal-500);display:flex;align-items:center;justify-content:center;font-size:.95rem;margin-bottom:.6rem}
+        [data-theme="dark"] .measure-card .m-icon{background:rgba(20,184,166,.2)}
+        .measure-card h4{font-size:.92rem;font-weight:700;color:var(--text-1);margin-bottom:.25rem}
+        .measure-card p{font-size:.82rem;color:var(--text-2);line-height:1.5;margin:0}
+
+        .cross-links{margin-top:2.5rem;padding-top:1.75rem;border-top:1px solid var(--border)}
+        .cross-links h3{font-size:.78rem;text-transform:uppercase;letter-spacing:.07em;color:var(--text-3);font-weight:700;margin-bottom:1rem}
+        .cross-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem}
+        .cross-link{display:flex;align-items:center;gap:10px;padding:.9rem 1rem;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-md);transition:all var(--t)}
+        .cross-link:hover{border-color:var(--primary-500);background:var(--primary-50);transform:translateY(-2px)}
+        [data-theme="dark"] .cross-link:hover{background:rgba(99,102,241,.12)}
+        .cross-link i{width:32px;height:32px;border-radius:var(--r-sm);background:var(--primary-50);color:var(--primary-600);display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0}
+        [data-theme="dark"] .cross-link i{background:rgba(99,102,241,.18)}
+        .cross-link-text strong{display:block;font-size:.88rem;color:var(--text-1);font-weight:600}
+        .cross-link-text span{font-size:.78rem;color:var(--text-3)}
+
+        /* === FOOTER === */
+        .footer{background:var(--surface);border-top:1px solid var(--border);padding:3rem 0 1.5rem;margin-top:2rem}
+        .footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:2.5rem;margin-bottom:2rem}
+        .footer-brand .nav-brand{margin-bottom:.85rem}
+        .footer-brand p{color:var(--text-2);font-size:.9rem;max-width:300px}
+        .footer-social{display:flex;gap:.5rem;margin-top:1rem}
+        .footer-social a{width:36px;height:36px;border-radius:var(--r-sm);background:var(--surface-2);display:flex;align-items:center;justify-content:center;color:var(--text-2);transition:all var(--t)}
+        .footer-social a:hover{background:var(--primary-600);color:#fff;transform:translateY(-2px)}
+        .footer-col h4{font-size:.85rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-1);margin-bottom:.85rem}
+        .footer-col ul{display:flex;flex-direction:column;gap:.5rem}
+        .footer-col a{color:var(--text-2);font-size:.88rem;transition:color var(--t)}
+        .footer-col a:hover{color:var(--primary-600)}
+        .footer-bottom{border-top:1px solid var(--border);padding-top:1.25rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+        .footer-bottom p{font-size:.82rem;color:var(--text-3)}
+        .footer-legal{display:flex;gap:1rem;flex-wrap:wrap}
+        .footer-legal a{font-size:.82rem;color:var(--text-3);transition:color var(--t)}
+        .footer-legal a:hover{color:var(--primary-600)}
+
+        @media (max-width:1024px){
+            .footer-grid{grid-template-columns:1fr 1fr;gap:2rem}
+            .footer-brand{grid-column:1/-1}
+            .legal-layout{grid-template-columns:1fr;gap:1.5rem}
+            .toc{position:static;display:none}
+            .measures-grid{grid-template-columns:1fr}
+        }
+        @media (max-width:768px){
+            .nav-links{position:fixed;top:var(--header-h);left:0;right:0;background:var(--surface);flex-direction:column;padding:1.5rem var(--container-px);gap:0;transform:translateY(-150%);transition:transform var(--t);box-shadow:var(--shadow-md);border-bottom:1px solid var(--border);z-index:99}
+            .nav-links.open{transform:translateY(0)}
+            .nav-links a{display:block;padding:1rem 0;width:100%;border-bottom:1px solid var(--border)}
+            .nav-links a:last-child{border-bottom:none}
+            .nav-toggle{display:flex}
+            .nav-cta{display:none}
+            .cross-grid{grid-template-columns:1fr}
+            .footer-grid{grid-template-columns:1fr;gap:1.5rem}
+            .footer-brand{grid-column:auto}
+            .footer-bottom{flex-direction:column;align-items:flex-start}
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar" id="navbar" aria-label="Navigation principale">
+        <div class="container">
+            <a href="index.html" class="nav-brand">
+                <span class="brand-mark"><i class="fas fa-building"></i></span>
+                <span class="brand-text">Loyer<span class="brand-accent">Pro</span></span>
+            </a>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="biens.html">Biens</a></li>
+                <li><a href="gestion-locataires.html">Locataires</a></li>
+                <li><a href="paiements.html">Paiements</a></li>
+                <li><a href="facture-loyer.html">Quittances</a></li>
+                <li><a href="locataire.html">Espace client</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="icon-btn" id="theme-toggle" aria-label="Basculer le mode sombre"><i class="fas fa-moon" id="theme-icon"></i></button>
+                <a href="inscription.html" class="nav-cta"><i class="fas fa-user-plus"></i> Inscription</a>
+                <button class="nav-toggle" id="nav-toggle" aria-label="Ouvrir le menu" aria-expanded="false"><i class="fas fa-bars"></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <nav class="breadcrumb" aria-label="Fil d'Ariane">
+            <a href="index.html"><i class="fas fa-house"></i> Accueil</a>
+            <span class="sep">/</span>
+            <span class="current">Conformité RGPD</span>
+        </nav>
+    </div>
+
+    <section class="legal">
+        <div class="container">
+            <div class="legal-layout">
+                <aside class="toc" aria-label="Sommaire">
+                    <h4>Sommaire</h4>
+                    <ul>
+                        <li><a href="#engagement"><span class="num">1</span> Engagement LoyerPro</a></li>
+                        <li><a href="#registre"><span class="num">2</span> Registre des traitements</a></li>
+                        <li><a href="#technique"><span class="num">3</span> Mesures techniques</a></li>
+                        <li><a href="#organisation"><span class="num">4</span> Mesures organisationnelles</a></li>
+                        <li><a href="#dpo"><span class="num">5</span> DPO &amp; contact</a></li>
+                        <li><a href="#droits"><span class="num">6</span> Droits des personnes</a></li>
+                        <li><a href="#violation"><span class="num">7</span> Notification de violation</a></li>
+                        <li><a href="#sous-traitants"><span class="num">8</span> Sous-traitants</a></li>
+                    </ul>
+                </aside>
+
+                <article class="article">
+                    <header class="article-header">
+                        <span class="article-badge"><i class="fas fa-shield-halved"></i> Conformité RGPD</span>
+                        <h1>Conformité RGPD</h1>
+                        <div class="article-meta">
+                            <span><i class="fas fa-calendar"></i> Dernière mise à jour : 15 janvier 2025</span>
+                            <span><i class="fas fa-file-shield"></i> Version 2.0</span>
+                        </div>
+                    </header>
+
+                    <div class="prose">
+                        <p>LoyerPro, édité par DIGITALE EXPERT, s'engage à respecter le Règlement Général sur la Protection des Données (RGPD — règlement UE 2016/679) ainsi que la législation togolaise applicable en matière de données personnelles. La présente page synthétise notre démarche de conformité, les mesures mises en œuvre et les engagements pris envers les personnes dont les données sont traitées sur la plateforme de gestion locative.</p>
+
+                        <h2 id="engagement"><span class="sec-num">1</span> Engagement LoyerPro</h2>
+                        <p>LoyerPro place la protection des données personnelles au cœur de sa démarche produit et de son fonctionnement opérationnel. La conformité au RGPD n'est pas traitée comme une simple obligation réglementaire, mais comme un engagement envers les propriétaires bailleurs et leurs locataires, dont les données transitent quotidiennement par la plateforme. L'éditeur s'engage à appliquer les principes de minimisation, de finalité, de proportionnalité et de transparence à l'ensemble de ses traitements.</p>
+                        <p>Cet engagement se traduit par une démarche d'<strong>accountability</strong> (responsabilité démontrée) : LoyerPro est en mesure de prouver sa conformité à tout moment, en mobilisant la documentation appropriée, les registres de traitement, les analyses d'impact et les traces des mesures techniques et organisationnelles appliquées. La conformité fait l'objet d'un suivi continu, avec une revue annuelle complète et des points de contrôle trimestriels pilotés par l'équipe en charge de la sécurité.</p>
+
+                        <h2 id="registre"><span class="sec-num">2</span> Registre des traitements</h2>
+                        <p>Conformément à l'article 30 du RGPD, LoyerPro tient un registre des activités de traitement qui recense l'ensemble des traitements de données personnelles réalisés sur la plateforme. Ce registre est tenu à jour en continu, conservé à la disposition de l'autorité de contrôle et revu annuellement. Il constitue la base de notre démarche d'accountability et permet d'assurer la traçabilité de nos traitements.</p>
+                        <p>Les principaux traitements recensés sont les suivants :</p>
+                        <table class="data-table">
+                            <thead><tr><th>Traitement</th><th>Finalité</th><th>Base légale</th></tr></thead>
+                            <tbody>
+                                <tr><td>Gestion des comptes</td><td>Authentification et accès au service</td><td>Exécution du contrat</td></tr>
+                                <tr><td>Gestion locative</td><td>Suivi des biens, baux et locataires</td><td>Exécution du contrat</td></tr>
+                                <tr><td>Quittances &amp; reçus</td><td>Édition de documents en FCFA</td><td>Exécution du contrat</td></tr>
+                                <tr><td>Suivi des paiements</td><td>Enregistrement des encaissements</td><td>Exécution du contrat</td></tr>
+                                <tr><td>Support client</td><td>Réponse aux demandes WhatsApp/email</td><td>Intérêt légitime</td></tr>
+                                <tr><td>Notifications</td><td>Alertes échéances et statut du compte</td><td>Consentement</td></tr>
+                                <tr><td>Conservation comptable</td><td>Respect des obligations légales</td><td>Obligation légale</td></tr>
+                            </tbody>
+                        </table>
+
+                        <h2 id="technique"><span class="sec-num">3</span> Mesures techniques</h2>
+                        <p>LoyerPro met en œuvre un ensemble de mesures techniques de haut niveau pour garantir la sécurité, l'intégrité et la confidentialité des données personnelles traitées sur la plateforme. Ces mesures sont alignées sur les référentiels de l'ANSSI et les bonnes pratiques de l'industrie, et font l'objet de tests d'intrusion réguliers par des prestataires externes indépendants. Toute évolution du service fait l'objet d'une revue de sécurité préalable.</p>
+                        <div class="measures-grid">
+                            <div class="measure-card">
+                                <div class="m-icon"><i class="fas fa-lock"></i></div>
+                                <h4>Chiffrement TLS 1.3</h4>
+                                <p>Toutes les communications navigateur–serveur sont chiffrées en TLS 1.3, avec gestion stricte des certificats et abandon des protocoles obsolètes.</p>
+                            </div>
+                            <div class="measure-card">
+                                <div class="m-icon"><i class="fas fa-key"></i></div>
+                                <h4>Chiffrement AES-256</h4>
+                                <p>Les données au repos sont chiffrées en AES-256 sur l'ensemble des serveurs de production et des sauvegardes, avec rotation des clés.</p>
+                            </div>
+                            <div class="measure-card">
+                                <div class="m-icon"><i class="fas fa-cloud-arrow-up"></i></div>
+                                <h4>Sauvegardes redondantes</h4>
+                                <p>Sauvegardes automatiques quotidiennes, rétention géographique multi-zones et tests de restauration réguliers.</p>
+                            </div>
+                            <div class="measure-card">
+                                <div class="m-icon"><i class="fas fa-user-shield"></i></div>
+                                <h4>Authentification 2FA</h4>
+                                <p>Authentification à deux facteurs disponible, politique de mot de passe robuste et verrouillage anti-force-brute.</p>
+                            </div>
+                            <div class="measure-card">
+                                <div class="m-icon"><i class="fas fa-eye"></i></div>
+                                <h4>Journalisation &amp; SIEM</h4>
+                                <p>Journalisation des accès, détection d'anomalies en temps réel et corrélation des événements via un SIEM dédié.</p>
+                            </div>
+                            <div class="measure-card">
+                                <div class="m-icon"><i class="fas fa-bug"></i></div>
+                                <h4>Tests d'intrusion</h4>
+                                <p>Audits de sécurité réguliers par des prestataires indépendants, programme de bug bounty et revue de code systématique.</p>
+                            </div>
+                        </div>
+
+                        <h2 id="organisation"><span class="sec-num">4</span> Mesures organisationnelles</h2>
+                        <p>La conformité RGPD ne se résume pas à des mesures techniques : elle repose également sur une organisation rigoureuse et une culture de la protection des données partagée par l'ensemble des équipes. DIGITALE EXPERT a mis en place un ensemble de procédures et de bonnes pratiques destinées à garantir que chaque collaborateur applique les principes du RGPD dans son travail quotidien, qu'il soit développeur, support client ou dirigeant.</p>
+                        <ul class="bullets">
+                            <li><strong>Formation continue :</strong> sensibilisation obligatoire au RGPD pour tous les collaborateurs, avec modules de mise à niveau annuels et quiz de validation.</li>
+                            <li><strong>Accès limité :</strong> principe du moindre privilège, accès aux données personnelles strictement limité aux collaborateurs habilités, avec journalisation.</li>
+                            <li><strong>Confidentialité :</strong> accords de confidentialité signés par l'ensemble des collaborateurs et des prestataires, et clauses RGPD dans tous les contrats de sous-traitance.</li>
+                            <li><strong>Procédures internes :</strong> procédure de gestion des demandes d'exercice de droits, procédure de notification de violation et plan de continuité d'activité.</li>
+                            <li><strong>Gouvernance :</strong> revue annuelle de la conformité, désignation d'un référent RGPD et reporting régulier à la direction.</li>
+                        </ul>
+
+                        <h2 id="dpo"><span class="sec-num">5</span> DPO &amp; contact</h2>
+                        <p>DIGITALE EXPERT a désigné un référent à la protection des données chargé de piloter la conformité RGPD de LoyerPro. Ce référent est le point de contact privilégié pour toute question relative à la protection des données personnelles, que ce soit pour les utilisateurs, les locataires dont les données sont traitées par l'intermédiaire des propriétaires, ou l'autorité de contrôle compétente. Il veille à l'application des principes du RGPD et coordonne les actions de conformité.</p>
+                        <div class="info-card">
+                            <strong><i class="fas fa-id-card"></i> Contacter le référent RGPD</strong>
+                            Email : <a href="mailto:jeanskodoc22@gmail.com">jeanskodoc22@gmail.com</a><br>
+                            WhatsApp : <a href="https://wa.me/22892871605" target="_blank" rel="noopener">+228 92 87 16 05</a><br>
+                            Adresse postale : 123 Rue du Commerce, DIGITALE EXPERT, Lomé, Togo
+                        </div>
+                        <p>Le référent RGPD dispose d'une autonomie fonctionnelle lui permettant d'exercer sa mission sans conflit d'intérêts. Il reçoit les demandes d'exercice de droits, instruit les réclamations et coordonne, le cas échéant, les notifications à l'autorité de contrôle en cas d'incident. Toute demande est accusée réception dans un délai de 72 heures et traitée dans le délai légal d'un mois.</p>
+
+                        <h2 id="droits"><span class="sec-num">6</span> Droits des personnes</h2>
+                        <p>Le RGPD confère aux personnes dont les données sont traitées un ensemble de droits inaliénables, que LoyerPro s'engage à faciliter et à respecter. Ces droits s'appliquent à la fois aux propriétaires utilisateurs de la plateforme et aux locataires dont les données sont saisies par ces derniers. LoyerPro met à disposition des outils permettant aux propriétaires de transmettre les demandes de leurs locataires et accompagne l'instruction de chaque demande.</p>
+                        <p>Les droits reconnus aux personnes concernées sont les suivants :</p>
+                        <ul class="bullets">
+                            <li><strong>Droit d'accès (art. 15)</strong> : obtenir confirmation qu'un traitement est en cours et copie des données relatives à la personne.</li>
+                            <li><strong>Droit de rectification (art. 16)</strong> : corriger toute donnée inexacte ou incomplète sans retard injustifié.</li>
+                            <li><strong>Droit à l'effacement (art. 17)</strong> : demander la suppression des données (« droit à l'oubli »), sous réserve des obligations de conservation légales.</li>
+                            <li><strong>Droit à la limitation (art. 18)</strong> : demander la suspension temporaire d'un traitement pendant la vérification d'un élément contesté.</li>
+                            <li><strong>Droit à la portabilité (art. 20)</strong> : recevoir ses données dans un format structuré et réutilisable pour les transférer à un autre service.</li>
+                            <li><strong>Droit d'opposition (art. 21)</strong> : s'opposer à un traitement fondé sur l'intérêt légitime ou le consentement.</li>
+                            <li><strong>Droit de retirer le consentement (art. 7)</strong> : à tout moment, sans porter atteinte à la licéité du traitement antérieur.</li>
+                            <li><strong>Droit d'introduire une réclamation</strong> auprès de l'autorité de contrôle compétente.</li>
+                        </ul>
+                        <p>L'exercice de ces droits est gratuit et peut être réalisé en contactant LoyerPro par email ou WhatsApp (voir section précédente). LoyerPro s'engage à répondre dans un délai d'un mois, prolongeable de deux mois en cas de complexité, avec information préalable de la personne concernée. Pour plus de détails, consultez notre <a href="confidentialite.html">politique de confidentialité</a>.</p>
+
+                        <h2 id="violation"><span class="sec-num">7</span> Notification de violation</h2>
+                        <p>Conformément à l'article 33 du RGPD, LoyerPro s'engage à notifier toute violation de données à caractère personnel à l'autorité de contrôle compétente dans un délai de <strong>72 heures</strong> après en avoir pris connaissance, sauf si la violation est unlikely to result in a risk to the rights and freedoms of natural persons. Cette notification est accompagnée d'une description de la nature de la violation, du volume de données concerné, des mesures prises et des coordonnées du référent RGPD.</p>
+                        <p>Lorsque la violation présente un risque élevé pour les droits et libertés des personnes concernées, LoyerPro notifie également celles-ci dans les meilleurs délais, conformément à l'article 34 du RGPD. Cette communication décrit, en clair, la nature de la violation et les mesures de protection recommandées. Un registre interne des violations est tenu à jour, conformément à l'article 33-5, et permet d'assurer la traçabilité des incidents et des actions correctives menées.</p>
+
+                        <h2 id="sous-traitants"><span class="sec-num">8</span> Sous-traitants</h2>
+                        <p>LoyerPro fait appel à un nombre limité de sous-traitants soigneusement sélectionnés pour assurer l'hébergement, l'envoi d'emails, les paiements et certains services techniques. Conformément à l'article 28 du RGPD, chacun de ces sous-traitants est lié à LoyerPro par un contrat écrit qui définit l'objet, la durée, la nature et la finalité du traitement, le type de données et les obligations respectives des parties. Aucun sous-traitant n'a accès aux données en dehors du strict périmètre nécessaire à sa prestation.</p>
+                        <p>L'ensemble des sous-traitants retenus respecte les standards les plus exigeants en matière de sécurité et de confidentialité :</p>
+                        <ul class="bullets">
+                            <li><strong>Hébergeur certifié ISO 27001</strong> avec datacenters sécurisés, redondance multi-zones et audits réguliers.</li>
+                            <li><strong>Prestataire de paiement certifié PCI-DSS</strong> : aucune donnée bancaire n'est stockée sur les serveurs LoyerPro.</li>
+                            <li><strong>Service d'envoi d'emails</strong> conforme RGPD, avec chiffrement des transmissions et traçabilité des envois.</li>
+                            <li><strong>Prestataire d'infrastructure</strong> appliquant une politique de confidentialité équivalente à celle de LoyerPro.</li>
+                        </ul>
+                        <p>LoyerPro évalue régulièrement ses sous-traitants et se réserve le droit de remplacer tout prestataire dont le niveau de sécurité ou de conformité ne serait plus jugé suffisant. La liste actualisée des sous-traitants peut être obtenue sur demande adressée au référent RGPD à <a href="mailto:jeanskodoc22@gmail.com">jeanskodoc22@gmail.com</a>.</p>
+
+                        <div class="info-card">
+                            <strong><i class="fas fa-headset"></i> Question sur notre conformité ?</strong>
+                            Notre référent RGPD vous répond sur WhatsApp au <a href="https://wa.me/22892871605" target="_blank" rel="noopener">+228 92 87 16 05</a> ou par email à <a href="mailto:jeanskodoc22@gmail.com">jeanskodoc22@gmail.com</a>.
+                        </div>
+
+                        <div class="cross-links">
+                            <h3>Voir aussi</h3>
+                            <div class="cross-grid">
+                                <a href="confidentialite.html" class="cross-link">
+                                    <i class="fas fa-user-shield"></i>
+                                    <div class="cross-link-text"><strong>Confidentialité</strong><span>Politique de protection des données</span></div>
+                                </a>
+                                <a href="cgu.html" class="cross-link">
+                                    <i class="fas fa-file-contract"></i>
+                                    <div class="cross-link-text"><strong>CGU</strong><span>Conditions générales d'utilisation</span></div>
+                                </a>
+                                <a href="mentions-legales.html" class="cross-link">
+                                    <i class="fas fa-scale-balanced"></i>
+                                    <div class="cross-link-text"><strong>Mentions légales</strong><span>Éditeur et hébergement</span></div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="nav-brand">
+                        <span class="brand-mark"><i class="fas fa-building"></i></span>
+                        <span class="brand-text">Loyer<span class="brand-accent">Pro</span></span>
+                    </a>
+                    <p>La solution complète de gestion locative pour les propriétaires. Quittances, paiements, locataires — tout au même endroit, en FCFA.</p>
+                    <div class="footer-social">
+                        <a href="https://wa.me/22892871605" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://twitter.com" target="_blank" rel="noopener" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
+                        <a href="mailto:jeanskodoc22@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Application</h4>
+                    <ul>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                        <li><a href="biens.html">Biens immobiliers</a></li>
+                        <li><a href="gestion-locataires.html">Locataires</a></li>
+                        <li><a href="paiements.html">Paiements</a></li>
+                        <li><a href="facture-loyer.html">Quittances</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Compte</h4>
+                    <ul>
+                        <li><a href="inscription.html">Inscription</a></li>
+                        <li><a href="locataire.html">Espace client</a></li>
+                        <li><a href="chat.html">Contact &amp; support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Légal</h4>
+                    <ul>
+                        <li><a href="mentions-legales.html">Mentions légales</a></li>
+                        <li><a href="confidentialite.html">Confidentialité</a></li>
+                        <li><a href="cgu.html">CGU</a></li>
+                        <li><a href="rgpd.html">RGPD</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 LoyerPro — DIGITALE EXPERT. Tous droits réservés.</p>
+                <div class="footer-legal">
+                    <a href="mentions-legales.html">Mentions légales</a>
+                    <a href="confidentialite.html">Confidentialité</a>
+                    <a href="cgu.html">CGU</a>
+                    <a href="rgpd.html">RGPD</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme
+        const themeToggle=document.getElementById('theme-toggle'),themeIcon=document.getElementById('theme-icon'),prefersDark=window.matchMedia('(prefers-color-scheme: dark)'),savedTheme=localStorage.getItem('theme');
+        if(savedTheme==='dark'||(!savedTheme&&prefersDark.matches)){document.documentElement.setAttribute('data-theme','dark');themeIcon.classList.replace('fa-moon','fa-sun')}
+        themeToggle.addEventListener('click',()=>{const d=document.documentElement.getAttribute('data-theme')==='dark';if(d){document.documentElement.removeAttribute('data-theme');themeIcon.classList.replace('fa-sun','fa-moon');localStorage.setItem('theme','light')}else{document.documentElement.setAttribute('data-theme','dark');themeIcon.classList.replace('fa-moon','fa-sun');localStorage.setItem('theme','dark')}});
+        // Navbar
+        const navbar=document.getElementById('navbar'),navToggle=document.getElementById('nav-toggle'),navLinks=document.getElementById('nav-links');
+        window.addEventListener('scroll',()=>navbar.classList.toggle('scrolled',window.scrollY>20),{passive:true});
+        const toggleMenu=()=>{const o=navLinks.classList.toggle('open');navToggle.setAttribute('aria-expanded',o);navToggle.innerHTML=o?'<i class="fas fa-times"></i>':'<i class="fas fa-bars"></i>'};
+        navToggle.addEventListener('click',toggleMenu);
+        navLinks.querySelectorAll('a').forEach(l=>l.addEventListener('click',()=>navLinks.classList.contains('open')&&toggleMenu()));
+    </script>
+<script src="db.js"></script>
+<script src="auth.js"></script>
+<script src="navbar-auth.js"></script>
+<script src="auto-save.js"></script>
+<script src="whatsapp-float.js"></script>
+</body>
+</html>

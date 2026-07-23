@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Gestion des biens immobiliers — LoyerPro">
+    <meta name="theme-color" content="#4f46e5">
+    <title>Gestion des Biens — LoyerPro</title>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary-50:#eef2ff;--primary-100:#e0e7ff;--primary-500:#6366f1;--primary-600:#4f46e5;--primary-700:#4338ca;
+            --teal-500:#14b8a6;--amber-400:#fbbf24;--amber-500:#f59e0b;--amber-600:#d97706;
+            --rose-500:#f43f5e;--emerald-500:#10b981;
+            --text-1:#0f172a;--text-2:#475569;--text-3:#94a3b8;
+            --bg:#f8fafc;--surface:#fff;--surface-2:#f1f5f9;--surface-3:#e2e8f0;
+            --border:#e2e8f0;--border-strong:#cbd5e1;
+            --r-sm:8px;--r-md:12px;--r-lg:18px;--r-xl:28px;--r-full:999px;
+            --shadow-xs:0 1px 2px rgba(15,23,42,.05);--shadow-sm:0 2px 8px rgba(15,23,42,.06);
+            --shadow-md:0 8px 24px rgba(15,23,42,.08);--shadow-lg:0 20px 48px rgba(15,23,42,.12);
+            --shadow-glow:0 8px 32px rgba(99,102,241,.25);
+            --container-max:1240px;--container-px:clamp(1rem,5vw,2rem);--header-h:72px;
+            --t:.3s cubic-bezier(.4,0,.2,1);
+            --gradient-primary:linear-gradient(135deg,#6366f1 0%,#8b5cf6 50%,#ec4899 100%);
+        }
+        [data-theme="dark"]{
+            --text-1:#f1f5f9;--text-2:#cbd5e1;--text-3:#64748b;
+            --bg:#0a0e1a;--surface:#131826;--surface-2:#1a2030;--surface-3:#242b3d;
+            --border:#242b3d;--border-strong:#334155;
+            --shadow-sm:0 2px 8px rgba(0,0,0,.4);--shadow-md:0 8px 24px rgba(0,0,0,.5);--shadow-lg:0 20px 48px rgba(0,0,0,.6);
+        }
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+        body{background:var(--bg);color:var(--text-1);font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.6;overflow-x:hidden;transition:background-color var(--t),color var(--t);-webkit-font-smoothing:antialiased}
+        a{color:inherit;text-decoration:none}
+        ul{list-style:none}
+        button{font-family:inherit}
+        img{max-width:100%;display:block}
+        :focus-visible{outline:3px solid var(--primary-500);outline-offset:3px;border-radius:4px}
+        .container{width:100%;max-width:var(--container-max);margin:0 auto;padding:0 var(--container-px)}
+
+        /* ============= NAVBAR ============= */
+        .navbar{position:fixed;top:0;left:0;right:0;height:var(--header-h);background:rgba(255,255,255,.8);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);z-index:100;transition:all var(--t);border-bottom:1px solid transparent}
+        [data-theme="dark"] .navbar{background:rgba(19,24,38,.85)}
+        .navbar.scrolled{border-bottom-color:var(--border);box-shadow:var(--shadow-sm)}
+        .navbar .container{height:100%;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+        .nav-brand{display:flex;align-items:center;gap:10px;font-size:1.35rem;font-weight:800;letter-spacing:-.02em}
+        .brand-mark{width:38px;height:38px;border-radius:var(--r-sm);background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.1rem;box-shadow:var(--shadow-glow)}
+        .brand-text{color:var(--text-1)}
+        .brand-accent{background:var(--gradient-primary);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+        .nav-links{display:flex;gap:clamp(1rem,2vw,2rem);align-items:center}
+        .nav-links a{color:var(--text-2);font-weight:500;font-size:.95rem;transition:color var(--t);position:relative}
+        .nav-links a::after{content:'';position:absolute;bottom:-6px;left:0;width:0;height:2px;background:var(--primary-500);transition:width var(--t);border-radius:2px}
+        .nav-links a:hover{color:var(--text-1)}
+        .nav-links a:hover::after{width:100%}
+        .nav-links a.active{color:var(--primary-600);font-weight:600}
+        .nav-links a.active::after{width:100%}
+        .nav-actions{display:flex;align-items:center;gap:.5rem}
+        .icon-btn{background:var(--surface-2);border:none;color:var(--text-1);width:40px;height:40px;border-radius:var(--r-sm);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;transition:all var(--t);position:relative}
+        .icon-btn:hover{background:var(--primary-50);color:var(--primary-600)}
+        [data-theme="dark"] .icon-btn:hover{background:rgba(99,102,241,.15)}
+        .nav-cta{background:var(--primary-600);color:#fff;padding:10px 20px;border-radius:var(--r-full);font-weight:600;font-size:.9rem;transition:all var(--t);display:inline-flex;align-items:center;gap:6px}
+        .nav-cta:hover{background:var(--primary-700);transform:translateY(-1px);box-shadow:var(--shadow-glow)}
+        .nav-toggle{display:none;background:var(--surface-2);border:none;color:var(--text-1);font-size:1.25rem;cursor:pointer;width:44px;height:44px;border-radius:var(--r-sm);align-items:center;justify-content:center}
+
+        /* ============= PAGE ============= */
+        .page{padding-top:calc(var(--header-h) + 24px);padding-bottom:4rem;min-height:100vh}
+        .breadcrumb{display:flex;align-items:center;gap:.5rem;font-size:.85rem;color:var(--text-3);margin-bottom:.75rem;flex-wrap:wrap}
+        .breadcrumb a{color:var(--text-2);transition:color var(--t)}
+        .breadcrumb a:hover{color:var(--primary-600)}
+        .breadcrumb i{font-size:.6rem;opacity:.6}
+        .breadcrumb .current{color:var(--text-1);font-weight:600}
+
+        .page-head{margin-bottom:1.75rem}
+        .page-head h1{font-size:clamp(1.6rem,3.5vw,2.25rem);font-weight:800;letter-spacing:-.025em;color:var(--text-1);line-height:1.15}
+        .page-head h1 .accent{background:var(--gradient-primary);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+        .page-head p{color:var(--text-2);font-size:.98rem;margin-top:.5rem;max-width:60ch}
+
+        /* Stats résumées */
+        .summary-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:.75rem;margin-bottom:1.75rem}
+        .summary-chip{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:.9rem 1.1rem;display:flex;align-items:center;gap:.85rem;box-shadow:var(--shadow-xs);transition:all var(--t)}
+        .summary-chip:hover{transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+        .summary-chip .chip-ic{width:38px;height:38px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.95rem;flex-shrink:0}
+        .chip-ic.indigo{background:linear-gradient(135deg,#6366f1,#8b5cf6)}
+        .chip-ic.emerald{background:linear-gradient(135deg,#10b981,#14b8a6)}
+        .chip-ic.rose{background:linear-gradient(135deg,#f43f5e,#ec4899)}
+        .chip-ic.amber{background:linear-gradient(135deg,#f59e0b,#f97316)}
+        .chip-meta{min-width:0}
+        .chip-meta .lbl{font-size:.72rem;color:var(--text-3);text-transform:uppercase;letter-spacing:.04em}
+        .chip-meta .val{font-size:1.1rem;font-weight:800;color:var(--text-1);line-height:1.1;letter-spacing:-.01em}
+
+        /* ============= TOOLBAR ============= */
+        .toolbar{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:1rem;box-shadow:var(--shadow-sm);display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;margin-bottom:1.5rem;position:sticky;top:calc(var(--header-h) + 12px);z-index:20;backdrop-filter:saturate(180%) blur(8px);-webkit-backdrop-filter:saturate(180%) blur(8px)}
+        [data-theme="dark"] .toolbar{background:rgba(19,24,38,.92)}
+        .search-wrap{position:relative;flex:1;min-width:220px}
+        .search-wrap i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-3);font-size:.9rem;pointer-events:none}
+        .search-input{width:100%;padding:.7rem .9rem .7rem 2.5rem;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface-2);color:var(--text-1);font-size:.92rem;transition:all var(--t);min-height:44px}
+        .search-input:focus{outline:none;border-color:var(--primary-500);background:var(--surface);box-shadow:0 0 0 3px var(--primary-50)}
+        [data-theme="dark"] .search-input:focus{box-shadow:0 0 0 3px rgba(99,102,241,.2)}
+        .search-input::placeholder{color:var(--text-3)}
+        .filter-select{padding:.7rem 2.2rem .7rem .9rem;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface-2);color:var(--text-1);font-size:.9rem;cursor:pointer;transition:all var(--t);min-height:44px;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");background-repeat:no-repeat;background-position:right .8rem center}
+        .filter-select:focus{outline:none;border-color:var(--primary-500);background-color:var(--surface);box-shadow:0 0 0 3px var(--primary-50)}
+        [data-theme="dark"] .filter-select:focus{box-shadow:0 0 0 3px rgba(99,102,241,.2)}
+        .filter-select:hover{border-color:var(--border-strong)}
+
+        .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;padding:.75rem 1.25rem;border-radius:var(--r-full);font-weight:600;font-size:.9rem;text-decoration:none;transition:all var(--t);min-height:44px;border:2px solid transparent;cursor:pointer;white-space:nowrap}
+        .btn-primary{background:var(--primary-600);color:#fff}
+        .btn-primary:hover{background:var(--primary-700);transform:translateY(-1px);box-shadow:var(--shadow-glow)}
+        .btn-outline{background:transparent;color:var(--text-1);border-color:var(--border-strong)}
+        .btn-outline:hover{border-color:var(--primary-500);color:var(--primary-600);background:var(--primary-50)}
+        [data-theme="dark"] .btn-outline:hover{background:rgba(99,102,241,.1)}
+        .btn-danger{background:var(--rose-500);color:#fff}
+        .btn-danger:hover{background:#e11d48;transform:translateY(-1px)}
+        .btn-ghost{background:transparent;color:var(--text-2);padding:.5rem .9rem}
+        .btn-ghost:hover{background:var(--surface-2);color:var(--text-1)}
+
+        .toolbar-right{display:flex;align-items:center;gap:.5rem;margin-left:auto;flex-wrap:wrap}
+        .result-count{font-size:.82rem;color:var(--text-3);font-weight:500;padding:0 .25rem}
+        .result-count strong{color:var(--text-1);font-weight:700}
+
+        /* ============= GRID + CARDS ============= */
+        .properties-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.25rem}
+
+        .property-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-sm);transition:all var(--t);position:relative;display:flex;flex-direction:column;animation:cardIn .45s cubic-bezier(.4,0,.2,1) both}
+        @keyframes cardIn{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+        .property-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);border-color:var(--primary-100)}
+        [data-theme="dark"] .property-card:hover{border-color:var(--border-strong)}
+
+        .card-banner{height:84px;background:var(--surface-2);position:relative;overflow:hidden;display:flex;align-items:flex-end;padding:1rem;gap:.75rem}
+        .card-banner::before{content:'';position:absolute;inset:0;background:var(--banner-grad,var(--gradient-primary));opacity:.18;transition:opacity var(--t)}
+        .property-card:hover .card-banner::before{opacity:.28}
+        .card-banner::after{content:'';position:absolute;inset:0;background-image:radial-gradient(circle at 20% 30%,rgba(255,255,255,.15) 0,transparent 40%),radial-gradient(circle at 80% 70%,rgba(255,255,255,.1) 0,transparent 35%);pointer-events:none}
+        .prop-type-icon{width:48px;height:48px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.25rem;box-shadow:var(--shadow-md);position:relative;z-index:1;flex-shrink:0}
+        .prop-type-icon.Appartement{background:linear-gradient(135deg,#6366f1,#8b5cf6)}
+        .prop-type-icon.Maison{background:linear-gradient(135deg,#14b8a6,#06b6d4)}
+        .prop-type-icon.Studio{background:linear-gradient(135deg,#f59e0b,#f97316)}
+        .prop-type-icon.Commerce{background:linear-gradient(135deg,#f43f5e,#ec4899)}
+        .prop-type-icon.Parking{background:linear-gradient(135deg,#64748b,#475569)}
+        .prop-type-icon.Local{background:linear-gradient(135deg,#8b5cf6,#a855f7)}
+        .status-badge{position:absolute;top:.85rem;right:.85rem;display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:var(--r-full);font-size:.72rem;font-weight:700;z-index:2;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+        .status-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;animation:pulseDot 2s ease-in-out infinite}
+        @keyframes pulseDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+        .status-badge.occupied{background:rgba(99,102,241,.18);color:var(--primary-600)}
+        [data-theme="dark"] .status-badge.occupied{background:rgba(129,140,248,.2);color:#a5b4fc}
+        .status-badge.vacant{background:rgba(244,63,94,.18);color:var(--rose-500)}
+        [data-theme="dark"] .status-badge.vacant{background:rgba(251,113,133,.2);color:#fda4af}
+        .status-badge.maintenance{background:rgba(245,158,11,.18);color:var(--amber-600)}
+        [data-theme="dark"] .status-badge.maintenance{background:rgba(251,191,36,.2);color:#fcd34d}
+
+        .card-body{padding:1.1rem;display:flex;flex-direction:column;gap:.75rem;flex:1}
+        .card-title{font-size:1.05rem;font-weight:700;color:var(--text-1);letter-spacing:-.01em;line-height:1.3}
+        .card-address{display:flex;align-items:flex-start;gap:.5rem;font-size:.85rem;color:var(--text-2);line-height:1.4}
+        .card-address i{color:var(--text-3);margin-top:3px;flex-shrink:0}
+
+        .card-features{display:flex;gap:.5rem;flex-wrap:wrap}
+        .feature-pill{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;background:var(--surface-2);border-radius:var(--r-full);font-size:.78rem;color:var(--text-2);font-weight:500}
+        .feature-pill i{color:var(--text-3);font-size:.78rem}
+
+        .rent-block{margin-top:auto;padding-top:.5rem;border-top:1px dashed var(--border)}
+        .rent-label{font-size:.72rem;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
+        .rent-value{font-size:1.25rem;font-weight:800;color:var(--text-1);letter-spacing:-.02em;line-height:1.1}
+        .rent-detail{font-size:.74rem;color:var(--text-3);margin-top:2px}
+        .rent-detail strong{color:var(--text-2);font-weight:600}
+
+        .tenant-block{display:flex;align-items:center;gap:.6rem;padding:.6rem .75rem;background:var(--surface-2);border-radius:var(--r-sm);font-size:.82rem}
+        .tenant-block i{color:var(--primary-500)}
+        .tenant-block .tenant-info{flex:1;min-width:0}
+        .tenant-block .tenant-info strong{display:block;color:var(--text-1);font-weight:600;font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .tenant-block .tenant-info span{display:block;color:var(--text-3);font-size:.72rem}
+        .tenant-block .vacant-note{display:flex;align-items:center;gap:.5rem;color:var(--text-3);font-style:italic;width:100%}
+
+        .card-actions{display:flex;gap:.5rem;padding:0 1.1rem 1.1rem}
+        .card-actions .btn{flex:1;padding:.55rem .75rem;font-size:.85rem;min-height:38px}
+        .action-icon-btn{width:38px;height:38px;min-height:38px;border-radius:var(--r-sm);background:var(--surface-2);border:none;color:var(--text-2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.9rem;transition:all var(--t);flex:0 0 auto}
+        .action-icon-btn:hover{background:var(--primary-50);color:var(--primary-600);transform:translateY(-1px)}
+        [data-theme="dark"] .action-icon-btn:hover{background:rgba(99,102,241,.15)}
+        .action-icon-btn.danger:hover{background:rgba(244,63,94,.12);color:var(--rose-500)}
+
+        /* ============= EMPTY STATE ============= */
+        .empty-state{grid-column:1/-1;text-align:center;padding:4rem 1.5rem;background:var(--surface);border:2px dashed var(--border);border-radius:var(--r-lg)}
+        .empty-state .empty-ic{width:80px;height:80px;margin:0 auto 1rem;border-radius:50%;background:var(--surface-2);display:flex;align-items:center;justify-content:center;font-size:2.2rem;color:var(--text-3)}
+        .empty-state h3{font-size:1.2rem;font-weight:700;color:var(--text-1);margin-bottom:.4rem}
+        .empty-state p{color:var(--text-3);font-size:.92rem;margin-bottom:1.25rem;max-width:42ch;margin-left:auto;margin-right:auto}
+
+        /* ============= MODAL ============= */
+        .modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:1.5rem;z-index:200;opacity:0;visibility:hidden;transition:opacity var(--t),visibility var(--t)}
+        .modal-overlay.open{opacity:1;visibility:visible}
+        .modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);width:100%;max-width:640px;max-height:calc(100vh - 3rem);display:flex;flex-direction:column;box-shadow:var(--shadow-lg);transform:translateY(20px) scale(.97);transition:transform var(--t);overflow:hidden}
+        .modal-overlay.open .modal{transform:translateY(0) scale(1)}
+        .modal.small{max-width:440px}
+        .modal-head{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);flex-shrink:0}
+        .modal-head h3{font-size:1.15rem;font-weight:700;color:var(--text-1);display:flex;align-items:center;gap:.6rem;letter-spacing:-.01em}
+        .modal-head h3 i{color:var(--primary-500)}
+        .modal-close{background:var(--surface-2);border:none;color:var(--text-2);width:36px;height:36px;border-radius:var(--r-sm);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--t);font-size:1rem}
+        .modal-close:hover{background:rgba(244,63,94,.12);color:var(--rose-500);transform:rotate(90deg)}
+        .modal-body{padding:1.5rem;overflow-y:auto;flex:1}
+        .modal-foot{padding:1rem 1.5rem;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:.6rem;flex-shrink:0;background:var(--surface-2)}
+        [data-theme="dark"] .modal-foot{background:rgba(0,0,0,.15)}
+
+        .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+        .form-field{display:flex;flex-direction:column;gap:.4rem}
+        .form-field.full{grid-column:1/-1}
+        .form-field label{font-size:.83rem;font-weight:600;color:var(--text-1);display:flex;align-items:center;gap:5px}
+        .form-field label .req{color:var(--rose-500)}
+        .form-field label i{color:var(--text-3);font-size:.8rem;width:14px;text-align:center}
+        .form-control{width:100%;padding:.7rem .9rem;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface-2);color:var(--text-1);font-size:.92rem;font-family:inherit;transition:all var(--t);min-height:44px}
+        .form-control:focus{outline:none;border-color:var(--primary-500);background:var(--surface);box-shadow:0 0 0 3px var(--primary-50)}
+        [data-theme="dark"] .form-control:focus{box-shadow:0 0 0 3px rgba(99,102,241,.2)}
+        .form-control::placeholder{color:var(--text-3)}
+        textarea.form-control{resize:vertical;min-height:80px}
+        select.form-control{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");background-repeat:no-repeat;background-position:right .85rem center;padding-right:2.3rem;cursor:pointer}
+        .form-hint{font-size:.75rem;color:var(--text-3);margin-top:2px}
+
+        .input-suffix{position:relative}
+        .input-suffix .suffix{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:.78rem;color:var(--text-3);font-weight:600;pointer-events:none}
+        .input-suffix .form-control{padding-right:4rem}
+
+        /* Confirmation modal */
+        .confirm-body{text-align:center;padding:.5rem 0}
+        .confirm-ic{width:64px;height:64px;margin:0 auto 1rem;border-radius:50%;background:rgba(244,63,94,.12);color:var(--rose-500);display:flex;align-items:center;justify-content:center;font-size:1.6rem}
+        .confirm-body h4{font-size:1.15rem;font-weight:700;color:var(--text-1);margin-bottom:.4rem}
+        .confirm-body p{color:var(--text-2);font-size:.92rem;max-width:36ch;margin:0 auto}
+        .confirm-body p strong{color:var(--text-1);font-weight:700}
+
+        /* ============= TOASTS ============= */
+        .toast-container{position:fixed;bottom:1.5rem;right:1.5rem;z-index:300;display:flex;flex-direction:column;gap:.6rem;pointer-events:none;max-width:min(360px,calc(100vw - 2rem))}
+        .toast{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:.85rem 1rem;display:flex;align-items:center;gap:.7rem;box-shadow:var(--shadow-lg);pointer-events:auto;animation:toastIn .35s cubic-bezier(.4,0,.2,1) both;position:relative;overflow:hidden;min-width:260px}
+        .toast::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--primary-500)}
+        .toast.success::before{background:var(--emerald-500)}
+        .toast.error::before{background:var(--rose-500)}
+        .toast.info::before{background:var(--primary-500)}
+        .toast.warning::before{background:var(--amber-500)}
+        .toast.hide{animation:toastOut .3s ease forwards}
+        @keyframes toastIn{from{opacity:0;transform:translateX(120%)}to{opacity:1;transform:translateX(0)}}
+        @keyframes toastOut{to{opacity:0;transform:translateX(120%)}}
+        .toast-ic{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+        .toast.success .toast-ic{background:rgba(16,185,129,.15);color:var(--emerald-500)}
+        .toast.error .toast-ic{background:rgba(244,63,94,.15);color:var(--rose-500)}
+        .toast.info .toast-ic{background:rgba(99,102,241,.15);color:var(--primary-600)}
+        .toast.warning .toast-ic{background:rgba(245,158,11,.15);color:var(--amber-600)}
+        .toast-content{flex:1;min-width:0}
+        .toast-content strong{display:block;color:var(--text-1);font-size:.88rem;font-weight:700}
+        .toast-content span{display:block;color:var(--text-2);font-size:.8rem;margin-top:1px}
+        .toast-close{background:none;border:none;color:var(--text-3);cursor:pointer;padding:2px;font-size:.85rem;transition:color var(--t)}
+        .toast-close:hover{color:var(--text-1)}
+
+        /* ============= RESPONSIVE ============= */
+        @media (max-width:768px){
+            .nav-links{position:fixed;top:var(--header-h);left:0;right:0;background:var(--surface);flex-direction:column;padding:1.5rem var(--container-px);gap:0;transform:translateY(-150%);transition:transform var(--t);box-shadow:var(--shadow-md);border-bottom:1px solid var(--border);z-index:99}
+            .nav-links.open{transform:translateY(0)}
+            .nav-links a{display:block;padding:1rem 0;width:100%;border-bottom:1px solid var(--border)}
+            .nav-links a:last-child{border-bottom:none}
+            .nav-toggle{display:flex}
+            .nav-cta{display:none}
+            .toolbar{position:static;flex-direction:column;align-items:stretch}
+            .toolbar-right{margin-left:0;flex-direction:row;justify-content:space-between}
+            .search-wrap{min-width:100%}
+            .filter-select{flex:1}
+            .properties-grid{grid-template-columns:1fr}
+            .form-grid{grid-template-columns:1fr}
+            .modal{max-width:100%;border-radius:var(--r-lg)}
+            .toast-container{left:1rem;right:1rem;bottom:1rem;max-width:none}
+        }
+        @media (max-width:480px){
+            .summary-strip{grid-template-columns:1fr 1fr}
+        }
+        @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+    </style>
+</head>
+<body>
+<script src="auth.js"></script>
+<script>LoyerProAuth.requireBailleur();</script>
+
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="index.html" class="nav-brand" aria-label="LoyerPro — Accueil">
+                <span class="brand-mark"><i class="fas fa-building"></i></span>
+                <span class="brand-text">Loyer<span class="brand-accent">Pro</span></span>
+            </a>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="biens.html" class="active">Biens</a></li>
+                <li><a href="gestion-locataires.html">Locataires</a></li>
+                <li><a href="paiements.html">Paiements</a></li>
+                <li><a href="facture-loyer.html">Quittances</a></li>
+                <li><a href="locataire.html">Espace client</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="icon-btn" id="theme-toggle" aria-label="Basculer le mode sombre" title="Thème"><i class="fas fa-moon" id="theme-icon"></i></button>
+                <a href="inscription.html" class="nav-cta"><i class="fas fa-user-plus"></i> Inscription</a>
+                <button class="nav-toggle" id="nav-toggle" aria-label="Ouvrir le menu" aria-expanded="false"><i class="fas fa-bars"></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- PAGE -->
+    <section class="page">
+        <div class="container">
+            <!-- Breadcrumb -->
+            <nav class="breadcrumb" aria-label="Fil d'Ariane">
+                <a href="index.html"><i class="fas fa-house"></i> Accueil</a>
+                <i class="fas fa-chevron-right"></i>
+                <span class="current">Biens</span>
+            </nav>
+
+            <!-- Page head -->
+            <header class="page-head">
+                <h1>Gestion des <span class="accent">biens immobiliers</span></h1>
+                <p>Ajoutez, modifiez et suivez votre patrimoine locatif. Chaque bien affiche son loyer mensuel, son locataire actuel et son statut d'occupation.</p>
+            </header>
+
+            <!-- Summary -->
+            <div class="summary-strip" id="summary-strip"></div>
+
+            <!-- Toolbar -->
+            <div class="toolbar" role="region" aria-label="Filtres et recherche">
+                <div class="search-wrap">
+                    <i class="fas fa-magnifying-glass" aria-hidden="true"></i>
+                    <input type="search" id="search-input" class="search-input" placeholder="Rechercher par nom ou adresse…" aria-label="Rechercher un bien" autocomplete="off">
+                </div>
+                <select id="filter-type" class="filter-select" aria-label="Filtrer par type">
+                    <option value="">Tous les types</option>
+                    <option value="Appartement">Appartement</option>
+                    <option value="Maison">Maison</option>
+                    <option value="Studio">Studio</option>
+                    <option value="Commerce">Commerce</option>
+                    <option value="Parking">Parking</option>
+                    <option value="Local">Local</option>
+                </select>
+                <select id="filter-status" class="filter-select" aria-label="Filtrer par statut">
+                    <option value="">Tous les statuts</option>
+                    <option value="occupied">Occupé</option>
+                    <option value="vacant">Vacant</option>
+                    <option value="maintenance">Maintenance</option>
+                </select>
+                <div class="toolbar-right">
+                    <span class="result-count" id="result-count" aria-live="polite"></span>
+                    <button class="btn btn-primary" id="btn-add"><i class="fas fa-plus"></i> Ajouter un bien</button>
+                </div>
+            </div>
+
+            <!-- Properties grid -->
+            <div class="properties-grid" id="properties-grid" aria-live="polite"></div>
+        </div>
+    </section>
+
+    <!-- FORM MODAL -->
+    <div class="modal-overlay" id="form-modal" role="dialog" aria-modal="true" aria-labelledby="form-modal-title">
+        <div class="modal" role="document">
+            <div class="modal-head">
+                <h3 id="form-modal-title"><i class="fas fa-building-circle-plus"></i> <span id="form-modal-label">Ajouter un bien</span></h3>
+                <button class="modal-close" data-close aria-label="Fermer"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="property-form" novalidate>
+                <div class="modal-body">
+                    <input type="hidden" id="field-id">
+                    <div class="form-grid">
+                        <div class="form-field full">
+                            <label for="field-name"><i class="fas fa-tag"></i> Nom du bien <span class="req">*</span></label>
+                            <input type="text" id="field-name" class="form-control" placeholder="Ex. Appartement T3 — Lomé" required maxlength="80">
+                        </div>
+                        <div class="form-field">
+                            <label for="field-type"><i class="fas fa-layer-group"></i> Type <span class="req">*</span></label>
+                            <select id="field-type" class="form-control" required>
+                                <option value="Appartement">Appartement</option>
+                                <option value="Maison">Maison</option>
+                                <option value="Studio">Studio</option>
+                                <option value="Commerce">Commerce</option>
+                                <option value="Parking">Parking</option>
+                                <option value="Local">Local</option>
+                            </select>
+                        </div>
+                        <div class="form-field">
+                            <label for="field-status"><i class="fas fa-circle-info"></i> Statut <span class="req">*</span></label>
+                            <select id="field-status" class="form-control" required>
+                                <option value="vacant">Vacant</option>
+                                <option value="occupied">Occupé</option>
+                                <option value="maintenance">Maintenance</option>
+                            </select>
+                        </div>
+                        <div class="form-field full">
+                            <label for="field-address"><i class="fas fa-location-dot"></i> Adresse <span class="req">*</span></label>
+                            <textarea id="field-address" class="form-control" placeholder="N°, rue, quartier, ville" required maxlength="200"></textarea>
+                        </div>
+                        <div class="form-field">
+                            <label for="field-surface"><i class="fas fa-vector-square"></i> Surface (m²)</label>
+                            <input type="number" id="field-surface" class="form-control" placeholder="Ex. 65" min="0" step="1">
+                        </div>
+                        <div class="form-field">
+                            <label for="field-rooms"><i class="fas fa-door-open"></i> Nombre de pièces</label>
+                            <input type="number" id="field-rooms" class="form-control" placeholder="Ex. 3" min="0" step="1">
+                        </div>
+                        <div class="form-field">
+                            <label for="field-rent"><i class="fas fa-coins"></i> Loyer mensuel <span class="req">*</span></label>
+                            <div class="input-suffix">
+                                <input type="number" id="field-rent" class="form-control" placeholder="Ex. 350000" min="0" step="1000" required>
+                                <span class="suffix">FCFA</span>
+                            </div>
+                        </div>
+                        <div class="form-field">
+                            <label for="field-charges"><i class="fas fa-receipt"></i> Charges</label>
+                            <div class="input-suffix">
+                                <input type="number" id="field-charges" class="form-control" placeholder="Ex. 25000" min="0" step="500" value="0">
+                                <span class="suffix">FCFA</span>
+                            </div>
+                        </div>
+                        <div class="form-field full">
+                            <label for="field-deposit"><i class="fas fa-shield-halved"></i> Dépôt de garantie</label>
+                            <div class="input-suffix">
+                                <input type="number" id="field-deposit" class="form-control" placeholder="Ex. 375000" min="0" step="500" value="0">
+                                <span class="suffix">FCFA</span>
+                            </div>
+                            <span class="form-hint">Caution versée par le locataire à l'entrée dans les lieux.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-foot">
+                    <button type="button" class="btn btn-outline" data-close>Annuler</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> <span id="submit-label">Enregistrer</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- CONFIRM DELETE MODAL -->
+    <div class="modal-overlay" id="confirm-modal" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+        <div class="modal small" role="document">
+            <div class="modal-head">
+                <h3 id="confirm-title"><i class="fas fa-triangle-exclamation"></i> Supprimer le bien</h3>
+                <button class="modal-close" data-close aria-label="Fermer"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="confirm-body">
+                    <div class="confirm-ic"><i class="fas fa-trash-can"></i></div>
+                    <h4>Confirmer la suppression</h4>
+                    <p>Vous êtes sur le point de supprimer <strong id="confirm-name">ce bien</strong>. Cette action est définitive et ne pourra pas être annulée.</p>
+                </div>
+            </div>
+            <div class="modal-foot">
+                <button type="button" class="btn btn-outline" data-close>Annuler</button>
+                <button type="button" class="btn btn-danger" id="confirm-delete"><i class="fas fa-trash"></i> Supprimer définitivement</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST CONTAINER -->
+    <div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+    <script src="db.js"></script>
+    <script>
+    (function () {
+        'use strict';
+
+        // ============= RACCOURCIS =============
+        const db = window.LoyerProDB;
+        const $ = (s, c) => (c || document).querySelector(s);
+        const $$ = (s, c) => Array.from((c || document).querySelectorAll(s));
+
+        // Config des types et statuts
+        const TYPE_ICONS = {
+            Appartement: 'fa-building',
+            Maison: 'fa-house-chimney',
+            Studio: 'fa-bed',
+            Commerce: 'fa-store',
+            Parking: 'fa-square-parking',
+            Local: 'fa-warehouse'
+        };
+        const STATUS_LABELS = {
+            occupied: 'Occupé',
+            vacant: 'Vacant',
+            maintenance: 'Maintenance'
+        };
+        const STATUS_VACANT_TEXT = {
+            vacant: 'Bien disponible à la location',
+            maintenance: 'En cours de travaux'
+        };
+
+        // État de l'app
+        const state = {
+            search: '',
+            type: '',
+            status: '',
+            editingId: null,
+            pendingDeleteId: null
+        };
+
+        // ============= NAVBAR =============
+        const navbar = $('#navbar');
+        const navToggle = $('#nav-toggle');
+        const navLinks = $('#nav-links');
+        window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', window.scrollY > 20), { passive: true });
+        const toggleMenu = () => {
+            const o = navLinks.classList.toggle('open');
+            navToggle.setAttribute('aria-expanded', String(o));
+            navToggle.innerHTML = o ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        };
+        navToggle.addEventListener('click', toggleMenu);
+        navLinks.querySelectorAll('a').forEach(l => l.addEventListener('click', () => navLinks.classList.contains('open') && toggleMenu()));
+
+        // ============= THÈME =============
+        const themeToggle = $('#theme-toggle');
+        const themeIcon = $('#theme-icon');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark' || (!savedTheme && prefersDark.matches)) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            themeIcon.classList.replace('fa-moon', 'fa-sun');
+        }
+        themeToggle.addEventListener('click', () => {
+            const d = document.documentElement.getAttribute('data-theme') === 'dark';
+            if (d) {
+                document.documentElement.removeAttribute('data-theme');
+                themeIcon.classList.replace('fa-sun', 'fa-moon');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeIcon.classList.replace('fa-moon', 'fa-sun');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        // ============= TOASTS =============
+        const toastContainer = $('#toast-container');
+        const TOAST_ICONS = {
+            success: 'fa-circle-check',
+            error: 'fa-circle-exclamation',
+            info: 'fa-circle-info',
+            warning: 'fa-triangle-exclamation'
+        };
+        function toast(title, message, type = 'success', timeout = 3800) {
+            const el = document.createElement('div');
+            el.className = `toast ${type}`;
+            el.setAttribute('role', 'status');
+            el.innerHTML = `
+                <div class="toast-ic"><i class="fas ${TOAST_ICONS[type] || TOAST_ICONS.info}"></i></div>
+                <div class="toast-content"><strong>${escapeHtml(title)}</strong>${message ? '<span>' + escapeHtml(message) + '</span>' : ''}</div>
+                <button class="toast-close" aria-label="Fermer"><i class="fas fa-times"></i></button>
+            `;
+            toastContainer.appendChild(el);
+            const remove = () => {
+                el.classList.add('hide');
+                setTimeout(() => el.remove(), 300);
+            };
+            el.querySelector('.toast-close').addEventListener('click', remove);
+            const t = setTimeout(remove, timeout);
+            el.addEventListener('mouseenter', () => clearTimeout(t));
+        }
+        function escapeHtml(s) {
+            return String(s == null ? '' : s)
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        }
+
+        // ============= MODAL HELPERS =============
+        function openModal(id) {
+            const m = $('#' + id);
+            m.classList.add('open');
+            document.body.style.overflow = 'hidden';
+            const focusable = m.querySelector('input, select, textarea, button');
+            if (focusable) setTimeout(() => focusable.focus(), 100);
+        }
+        function closeModal(id) {
+            const m = $('#' + id);
+            m.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+        function closeAllModals() {
+            $$('.modal-overlay.open').forEach(m => m.classList.remove('open'));
+            document.body.style.overflow = '';
+        }
+        // Fermeture overlay + Échap
+        $$('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', e => {
+                if (e.target === overlay) closeAllModals();
+            });
+            $$('[data-close]', overlay).forEach(b => b.addEventListener('click', closeAllModals));
+        });
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closeAllModals();
+        });
+
+        // ============= FILTRES / RECHERCHE =============
+        const searchInput = $('#search-input');
+        const filterType = $('#filter-type');
+        const filterStatus = $('#filter-status');
+        const resultCount = $('#result-count');
+        const grid = $('#properties-grid');
+
+        searchInput.addEventListener('input', () => { state.search = searchInput.value.trim().toLowerCase(); render(); });
+        filterType.addEventListener('change', () => { state.type = filterType.value; render(); });
+        filterStatus.addEventListener('change', () => { state.status = filterStatus.value; render(); });
+
+        function getFilteredProperties() {
+            let list = db.getProperties();
+            if (state.type) list = list.filter(p => p.type === state.type);
+            if (state.status) list = list.filter(p => p.status === state.status);
+            if (state.search) {
+                list = list.filter(p => {
+                    const hay = ((p.name || '') + ' ' + (p.address || '')).toLowerCase();
+                    return hay.includes(state.search);
+                });
+            }
+            // Tri : occupés d'abord, puis par nom
+            list.sort((a, b) => {
+                if (a.status === 'occupied' && b.status !== 'occupied') return -1;
+                if (b.status === 'occupied' && a.status !== 'occupied') return 1;
+                return (a.name || '').localeCompare(b.name || '');
+            });
+            return list;
+        }
+
+        // ============= RENDU SUMMARY =============
+        function renderSummary() {
+            const props = db.getProperties();
+            const total = props.length;
+            const occupied = props.filter(p => p.status === 'occupied').length;
+            const vacant = props.filter(p => p.status === 'vacant').length;
+            const monthly = props
+                .filter(p => p.status === 'occupied')
+                .reduce((s, p) => s + (Number(p.rent) || 0) + (Number(p.charges) || 0), 0);
+            const chips = [
+                { ic: 'fa-layer-group', cls: 'indigo', lbl: 'Total biens', val: String(total) },
+                { ic: 'fa-circle-check', cls: 'emerald', lbl: 'Occupés', val: String(occupied) },
+                { ic: 'fa-circle-dot', cls: 'rose', lbl: 'Vacants', val: String(vacant) },
+                { ic: 'fa-coins', cls: 'amber', lbl: 'Loyers / mois', val: db.formatShort(monthly) + ' FCFA' }
+            ];
+            $('#summary-strip').innerHTML = chips.map(c => `
+                <div class="summary-chip">
+                    <div class="chip-ic ${c.cls}"><i class="fas ${c.ic}"></i></div>
+                    <div class="chip-meta">
+                        <div class="lbl">${c.lbl}</div>
+                        <div class="val">${c.val}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ============= RENDU LISTE =============
+        function render() {
+            renderSummary();
+            const list = getFilteredProperties();
+            resultCount.innerHTML = list.length === 0
+                ? 'Aucun bien'
+                : `<strong>${list.length}</strong> bien${list.length > 1 ? 's' : ''}`;
+
+            if (list.length === 0) {
+                const hasFilters = state.search || state.type || state.status;
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-ic"><i class="fas ${hasFilters ? 'fa-filter-circle-xmark' : 'fa-building-circle-xmark'}"></i></div>
+                        <h3>${hasFilters ? 'Aucun résultat' : 'Aucun bien enregistré'}</h3>
+                        <p>${hasFilters ? "Aucun bien ne correspond à vos critères de recherche. Essayez d'élargir vos filtres." : 'Commencez par ajouter votre premier bien immobilier pour suivre vos loyers et locataires.'}</p>
+                        ${hasFilters
+                            ? '<button class="btn btn-outline" id="btn-clear-filters"><i class="fas fa-rotate-left"></i> Réinitialiser les filtres</button>'
+                            : '<button class="btn btn-primary" id="btn-empty-add"><i class="fas fa-plus"></i> Ajouter mon premier bien</button>'}
+                    </div>
+                `;
+                const clearBtn = $('#btn-clear-filters');
+                if (clearBtn) clearBtn.addEventListener('click', resetFilters);
+                const emptyAdd = $('#btn-empty-add');
+                if (emptyAdd) emptyAdd.addEventListener('click', () => openFormModal(null));
+                return;
+            }
+
+            grid.innerHTML = list.map(p => renderCard(p)).join('');
+            // Brancher les actions
+            grid.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => openFormModal(b.dataset.edit)));
+            grid.querySelectorAll('[data-delete]').forEach(b => b.addEventListener('click', () => askDelete(b.dataset.delete)));
+        }
+
+        function renderCard(p) {
+            const monthly = (Number(p.rent) || 0) + (Number(p.charges) || 0);
+            const tenant = db.getTenantByProperty(p.id);
+            const tenantBlock = p.status === 'occupied'
+                ? (tenant
+                    ? `<div class="tenant-block">
+                        <i class="fas fa-user"></i>
+                        <div class="tenant-info">
+                            <strong>${escapeHtml((tenant.firstName || '') + ' ' + (tenant.lastName || ''))}</strong>
+                            <span>${escapeHtml(tenant.phone || tenant.email || 'Locataire actif')}</span>
+                        </div>
+                       </div>`
+                    : `<div class="tenant-block"><div class="vacant-note"><i class="fas fa-user-slash"></i> Aucun locataire associé</div></div>`)
+                : `<div class="tenant-block"><div class="vacant-note"><i class="fas ${p.status === 'maintenance' ? 'fa-screwdriver-wrench' : 'fa-door-open'}"></i> ${escapeHtml(STATUS_VACANT_TEXT[p.status] || '')}</div></div>`;
+
+            const features = [];
+            if (p.surface) features.push(`<span class="feature-pill"><i class="fas fa-vector-square"></i> ${escapeHtml(p.surface)} m²</span>`);
+            if (p.rooms) features.push(`<span class="feature-pill"><i class="fas fa-door-open"></i> ${escapeHtml(p.rooms)} pièce${p.rooms > 1 ? 's' : ''}</span>`);
+            features.push(`<span class="feature-pill"><i class="fas fa-layer-group"></i> ${escapeHtml(p.type)}</span>`);
+
+            return `
+                <article class="property-card" data-id="${p.id}">
+                    <div class="card-banner">
+                        <div class="prop-type-icon ${escapeHtml(p.type)}"><i class="fas ${TYPE_ICONS[p.type] || 'fa-building'}"></i></div>
+                        <span class="status-badge ${p.status}">${STATUS_LABELS[p.status] || p.status}</span>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">${escapeHtml(p.name || 'Bien sans nom')}</h3>
+                        <div class="card-address"><i class="fas fa-location-dot"></i><span>${escapeHtml(p.address || 'Adresse non renseignée')}</span></div>
+                        <div class="card-features">${features.join('')}</div>
+                        ${tenantBlock}
+                        <div class="rent-block">
+                            <div class="rent-label">Loyer mensuel (charges incluses)</div>
+                            <div class="rent-value">${db.formatFCFA(monthly)}</div>
+                            <div class="rent-detail">Loyer <strong>${db.formatFCFA(Number(p.rent) || 0)}</strong> · Charges <strong>${db.formatFCFA(Number(p.charges) || 0)}</strong></div>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-outline" data-edit="${p.id}"><i class="fas fa-pen"></i> Modifier</button>
+                        <button class="action-icon-btn danger" data-delete="${p.id}" aria-label="Supprimer ${escapeHtml(p.name || 'ce bien')}" title="Supprimer"><i class="fas fa-trash"></i></button>
+                    </div>
+                </article>
+            `;
+        }
+
+        function resetFilters() {
+            state.search = ''; state.type = ''; state.status = '';
+            searchInput.value = ''; filterType.value = ''; filterStatus.value = '';
+            render();
+        }
+
+        // ============= FORMULAIRE (AJOUT / ÉDITION) =============
+        const formModal = $('#form-modal');
+        const propertyForm = $('#property-form');
+        const formModalLabel = $('#form-modal-label');
+        const submitLabel = $('#submit-label');
+
+        function openFormModal(id) {
+            state.editingId = id || null;
+            propertyForm.reset();
+            $('#field-id').value = '';
+            // Valeurs par défaut
+            $('#field-charges').value = 0;
+            $('#field-deposit').value = 0;
+            $('#field-status').value = 'vacant';
+            $('#field-type').value = 'Appartement';
+
+            if (id) {
+                const p = db.getProperty(id);
+                if (!p) { toast('Erreur', 'Bien introuvable', 'error'); return; }
+                formModalLabel.textContent = 'Modifier le bien';
+                submitLabel.textContent = 'Mettre à jour';
+                $('#field-id').value = p.id;
+                $('#field-name').value = p.name || '';
+                $('#field-type').value = p.type || 'Appartement';
+                $('#field-status').value = p.status || 'vacant';
+                $('#field-address').value = p.address || '';
+                $('#field-surface').value = p.surface ?? '';
+                $('#field-rooms').value = p.rooms ?? '';
+                $('#field-rent').value = p.rent ?? '';
+                $('#field-charges').value = p.charges ?? 0;
+                $('#field-deposit').value = p.deposit ?? 0;
+            } else {
+                formModalLabel.textContent = 'Ajouter un bien';
+                submitLabel.textContent = 'Enregistrer';
+            }
+            openModal('form-modal');
+        }
+
+        $('#btn-add').addEventListener('click', () => openFormModal(null));
+
+        propertyForm.addEventListener('submit', e => {
+            e.preventDefault();
+            // Validation
+            const name = $('#field-name').value.trim();
+            const address = $('#field-address').value.trim();
+            const rent = parseInt($('#field-rent').value, 10);
+            if (!name) { toast('Champ requis', 'Le nom du bien est obligatoire', 'warning'); $('#field-name').focus(); return; }
+            if (!address) { toast('Champ requis', "L'adresse est obligatoire", 'warning'); $('#field-address').focus(); return; }
+            if (isNaN(rent) || rent < 0) { toast('Montant invalide', 'Le loyer mensuel doit être un nombre positif', 'warning'); $('#field-rent').focus(); return; }
+
+            const session = window.LoyerProAuth ? LoyerProAuth.currentSession() : null;
+            const bailleurId = session ? session.identifier : null;
+
+            const payload = {
+                bailleurId: bailleurId,
+                name,
+                type: $('#field-type').value,
+                status: $('#field-status').value,
+                address,
+                surface: parseInt($('#field-surface').value, 10) || 0,
+                rooms: parseInt($('#field-rooms').value, 10) || 0,
+                rent: rent,
+                charges: parseInt($('#field-charges').value, 10) || 0,
+                deposit: parseInt($('#field-deposit').value, 10) || 0
+            };
+
+            try {
+                if (state.editingId) {
+                    db.update('properties', state.editingId, payload);
+                    toast('Bien mis à jour', `« ${name} » a été modifié avec succès.`, 'success');
+                } else {
+                    const created = db.create('properties', payload);
+                    toast('Bien ajouté', `« ${created.name} » est désormais dans votre patrimoine.`, 'success');
+
+                    // === Envoi des données du bien par WhatsApp au +22892871605 ===
+                    sendBienToWhatsApp(payload, db.formatFCFA);
+                }
+                closeAllModals();
+                render();
+            } catch (err) {
+                console.error(err);
+                toast('Erreur', "Une erreur est survenue pendant l'enregistrement.", 'error');
+            }
+        });
+
+        // === Envoi des détails d'un bien par WhatsApp au +22892871605 ===
+        function sendBienToWhatsApp(bien, formatFCFA) {
+            const session = window.LoyerProAuth ? LoyerProAuth.currentSession() : null;
+            const bailleurName = session ? session.name : 'Bailleur';
+
+            const msg = [
+                '🏠 *NOUVEAU BIEN ENREGISTRÉ — LOYERPRO*',
+                '═══════════════════════════',
+                '',
+                '👤 *Bailleur*',
+                `   • ${bailleurName}`,
+                '',
+                '🏢 *Détails du bien*',
+                `   • Nom : ${bien.name}`,
+                `   • Type : ${bien.type}`,
+                `   • Adresse : ${bien.address}`,
+                `   • Surface : ${bien.surface} m²`,
+                `   • Pièces : ${bien.rooms}`,
+                `   • Loyer nu : ${formatFCFA(bien.rent)}`,
+                `   • Charges : ${formatFCFA(bien.charges)}`,
+                `   • Loyer total : ${formatFCFA(bien.rent + bien.charges)}`,
+                `   • Dépôt de garantie : ${formatFCFA(bien.deposit)}`,
+                `   • Statut : ${bien.status === 'occupied' ? 'Occupé' : bien.status === 'vacant' ? 'Vacant' : 'Maintenance'}`,
+                '',
+                `📅 Enregistré le ${new Date().toLocaleString('fr-FR')}`,
+                '',
+                '✅ Bien ajouté à la base de données locale.'
+            ].join('\n');
+
+            const url = `https://wa.me/22892871605?text=${encodeURIComponent(msg)}`;
+            window.open(url, '_blank', 'noopener');
+            console.log('✅ Données du bien envoyées par WhatsApp au +22892871605');
+        }
+
+        // ============= SUPPRESSION =============
+        const confirmModal = $('#confirm-modal');
+        const confirmName = $('#confirm-name');
+        const confirmDeleteBtn = $('#confirm-delete');
+
+        function askDelete(id) {
+            const p = db.getProperty(id);
+            if (!p) { toast('Erreur', 'Bien introuvable', 'error'); return; }
+            state.pendingDeleteId = id;
+            confirmName.textContent = `« ${p.name || 'ce bien'} »`;
+            openModal('confirm-modal');
+        }
+
+        confirmDeleteBtn.addEventListener('click', () => {
+            if (!state.pendingDeleteId) return;
+            const p = db.getProperty(state.pendingDeleteId);
+            const name = p ? p.name : 'Bien';
+            try {
+                const ok = db.remove('properties', state.pendingDeleteId);
+                if (ok) {
+                    toast('Bien supprimé', `« ${name} » a été définitivement supprimé.`, 'success');
+                } else {
+                    toast('Erreur', 'Impossible de supprimer ce bien.', 'error');
+                }
+            } catch (err) {
+                console.error(err);
+                toast('Erreur', "Une erreur est survenue lors de la suppression.", 'error');
+            } finally {
+                state.pendingDeleteId = null;
+                closeAllModals();
+                render();
+            }
+        });
+
+        // ============= INIT =============
+        render();
+        // Petit message d'aôtel au démarrage si DB vide
+        if (db.getProperties().length === 0) {
+            toast('Bienvenue', 'Aucun bien pour le moment. Cliquez sur « Ajouter un bien ».', 'info', 5000);
+        }
+    })();
+    </script>
+<script src="navbar-auth.js"></script>
+<script src="auto-save.js"></script>
+<script src="whatsapp-float.js"></script>
+</body>
+</html>
